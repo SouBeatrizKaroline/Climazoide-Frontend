@@ -32,7 +32,7 @@ export interface LiveOverview {
 }
 
 export type ModelReadinessStatus = 'passed' | 'pending' | 'blocked_by_auth'
-export type CandidateModelStatus = 'ready_for_retraining' | 'research_only' | 'not_implemented'
+export type CandidateModelStatus = 'ready_for_retraining' | 'ready_for_training' | 'research_only' | 'not_implemented'
 
 export interface ModelManifest {
   schema_version: string

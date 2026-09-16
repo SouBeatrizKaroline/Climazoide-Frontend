@@ -76,6 +76,8 @@ docker build --build-arg VITE_API_URL=https://api.exemplo.org -t climazoide-web 
 
 Em produção, configure `VITE_API_URL` com a URL HTTPS do backend e inclua a origem do site em `ALLOWED_ORIGINS`. Nunca coloque credenciais em variáveis `VITE_*`: elas são públicas no navegador.
 
+Para o GitHub Pages, crie em **Settings → Secrets and variables → Actions → Variables** a variável `VITE_API_URL` com a URL HTTPS publicada pelo backend. O workflow `Deploy Pages` injeta essa variável no build; sem ela, o site continua apontando para o backend local por segurança e não exibe números simulados.
+
 ## WORCAP 2026
 
 O painel operacional complementa a tarefa científica de estimar precipitação mensal M+1 sobre a América do Sul. Ele comunica:
@@ -101,7 +103,7 @@ O laboratório de modelos não contém uma lista mantida manualmente no frontend
 
 - PCA/EOF + LSTM pronto para retreino;
 - PLS concorrente e PLS defasado somente como pesquisa;
-- ConvLSTM como ainda não implementado;
+- ConvLSTM com arquitetura pronta para treinamento, ainda sem métricas oficiais;
 - checklist de contrato temporal, grade, dataset, retreino, submissão e leaderboard;
 - commit e branch científicos que originaram o estado exibido.
 
