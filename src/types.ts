@@ -6,6 +6,8 @@ export interface LiveOverview {
   air_quality: { observed_at: string | null; us_aqi: number | null; pm2_5: number | null; pm10: number | null; carbon_monoxide: number | null; nitrogen_dioxide: number | null; ozone: number | null; uv_index: number | null }
   daily: DailyForecast[]
   cptec: { available: boolean; provider: string; location?: string; state?: string; updated_at?: string; forecast: Array<Record<string, string | number>> }
+  climate_context: { oni: { available: boolean; season?: string; year?: number; value?: number; phase?: string } }
+  astronomy: { available: boolean; moon_phase?: string; moon_illumination?: string; sunrise_utc?: string; sunset_utc?: string; date?: string }
   impacts: Array<{ id: string; label: string; value: number | null; unit: string; detail: string }>
   sources: Array<{ name: string; scope: string; available: boolean; updated_at: string | null; url: string }>
 }

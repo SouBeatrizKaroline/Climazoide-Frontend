@@ -51,6 +51,8 @@ GET /v1/live/overview?location=recife
 
 O navegador não consulta serviços climáticos diretamente. O backend centraliza Open-Meteo, CAMS/Copernicus, CPTEC/INPE, timeouts, transformações e proveniência.
 
+O painel também recebe o ONI mais recente do NOAA CPC e efemérides do US Naval Observatory para contextualizar ENSO, fase lunar, nascer e pôr do Sol sem transformar correlação em causalidade.
+
 ## Qualidade
 
 ```bash
