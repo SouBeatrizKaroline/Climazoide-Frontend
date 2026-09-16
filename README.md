@@ -1,6 +1,12 @@
 # Climazoide Web
 
+[![CI](https://github.com/SouBeatrizKaroline/Climazoide-Frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/SouBeatrizKaroline/Climazoide-Frontend/actions/workflows/ci.yml)
+[![Pages](https://github.com/SouBeatrizKaroline/Climazoide-Frontend/actions/workflows/deploy-pages.yml/badge.svg)](https://soubeatrizkaroline.github.io/Climazoide-Frontend/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-0b7a75.svg)](LICENSE)
+
 Dashboard responsivo conectado ao **Climazoide API**. Transforma dados públicos recentes em uma leitura clara de tempo, chuva, solo, ar, agricultura, conforto térmico e disponibilidade hídrica.
+
+Projeto aberto sob licença MIT. Consulte [como contribuir](CONTRIBUTING.md), [governança](GOVERNANCE.md), [segurança](SECURITY.md) e [histórico de versões](CHANGELOG.md).
 
 ## Funciona de verdade
 

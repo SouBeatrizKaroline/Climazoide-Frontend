@@ -1,0 +1,21 @@
+name: Proposta
+description: Proponha uma melhoria de experiência ou visualização
+title: "feat: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: audience
+    attributes:
+      label: Pessoa e necessidade
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solução sugerida
+    validations:
+      required: true
+  - type: textarea
+    id: accessibility
+    attributes:
+      label: Impacto em acessibilidade e dispositivos

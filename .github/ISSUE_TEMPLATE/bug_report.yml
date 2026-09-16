@@ -1,0 +1,27 @@
+name: Bug
+description: Relate um comportamento incorreto e reproduzível
+title: "bug: "
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Problema
+      description: O que aconteceu e qual era o resultado esperado?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Como reproduzir
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Navegador, dispositivo e versão
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidências
+      description: Capturas e erros sem dados sensíveis.
