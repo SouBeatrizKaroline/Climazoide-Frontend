@@ -48,6 +48,7 @@ Acesse `http://localhost:5173`. O backend padrão é `http://localhost:8000`.
 ```text
 GET /v1/live/locations
 GET /v1/live/overview?location=brasilia
+GET /v1/model/manifest
 ```
 
 O navegador não consulta serviços climáticos diretamente. O backend centraliza Open-Meteo, CAMS/Copernicus, CPTEC/INPE, timeouts, transformações e proveniência.
@@ -93,6 +94,18 @@ O frontend não apresenta as métricas antigas: a auditoria detectou que a execu
 - **Camada operacional:** 13 pontos representativos, usados somente para dados públicos recentes e contexto de decisão.
 
 Uma capital não representa um país inteiro e não substitui a previsão mensal em grade. Essa limitação aparece no próprio painel.
+
+### Sincronização científica
+
+O laboratório de modelos não contém uma lista mantida manualmente no frontend. Ele consome `/v1/model/manifest` e apresenta:
+
+- PCA/EOF + LSTM pronto para retreino;
+- PLS concorrente e PLS defasado somente como pesquisa;
+- ConvLSTM como ainda não implementado;
+- checklist de contrato temporal, grade, dataset, retreino, submissão e leaderboard;
+- commit e branch científicos que originaram o estado exibido.
+
+Se o backend mudar o contrato, a tipagem e os testes do frontend acusam a divergência durante a CI.
 
 ## Estrutura
 

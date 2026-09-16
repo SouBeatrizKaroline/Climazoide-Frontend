@@ -30,3 +30,37 @@ export interface LiveOverview {
   impacts: Array<{ id: string; label: string; value: number | null; unit: string; detail: string }>
   sources: Array<{ name: string; scope: string; available: boolean; applicable?: boolean; updated_at: string | null; url: string }>
 }
+
+export type ModelReadinessStatus = 'passed' | 'pending' | 'blocked_by_auth'
+export type CandidateModelStatus = 'ready_for_retraining' | 'research_only' | 'not_implemented'
+
+export interface ModelManifest {
+  schema_version: string
+  model_id: string
+  model_name: string
+  status: 'requires_retraining'
+  source_repository: string
+  source_branch: string
+  source_artifact_commit: string
+  evaluation_scope: string
+  metrics: null
+  reviewed_sources: Array<{
+    ref: string
+    commit: string
+    decision: string
+    promoted: boolean
+    reason?: string
+  }>
+  candidate_models: Array<{
+    id: string
+    label: string
+    status: CandidateModelStatus
+    purpose: string
+  }>
+  readiness: Array<{
+    id: string
+    label: string
+    status: ModelReadinessStatus
+  }>
+  limitations: string[]
+}
