@@ -1,96 +1,41 @@
 import { useEffect, useState } from 'react'
-import { Activity, CloudRain, Database, Gauge, Info, Layers3, RefreshCw, Sparkles } from 'lucide-react'
-import { getDashboardOptions, getDashboardSummary } from './api'
-import { demoSummary } from './demo'
-import { ForecastControls } from './components/ForecastControls'
-import { RainChart } from './components/RainChart'
-import { StatusTag } from './components/StatusTag'
-import type { DashboardOptions, DashboardSummary } from './types'
+import { Activity, CloudRain, Droplets, ExternalLink, Gauge, HeartPulse, Leaf, RefreshCw, ShieldCheck, ThermometerSun, Wind } from 'lucide-react'
+import { getLiveOverview, getLocations } from './api'
+import type { LiveOverview, LocationOption } from './types'
 import './styles.css'
 
-const formatValue = (value: number | null, unit: string) => value === null ? '—' : `${value.toLocaleString('pt-BR')} ${unit}`.trim()
+const weatherLabel = (code: number) => code === 0 ? 'Céu limpo' : code <= 3 ? 'Parcialmente nublado' : code <= 48 ? 'Névoa' : code <= 67 ? 'Chuva' : code <= 82 ? 'Pancadas de chuva' : code <= 99 ? 'Trovoadas' : 'Condição variável'
+const format = (value: number | null | undefined, unit = '', digits = 1) => value == null ? 'Indisponível' : `${value.toLocaleString('pt-BR', { maximumFractionDigits: digits })}${unit}`
+const aqiLabel = (value: number | null) => value == null ? 'Sem leitura' : value <= 50 ? 'Boa' : value <= 100 ? 'Moderada' : value <= 150 ? 'Atenção a sensíveis' : value <= 200 ? 'Ruim' : 'Muito ruim'
 
 export default function App() {
-  const fallbackOptions: DashboardOptions = {
-    months: ['2024-12'], regions: ['america-do-sul'], default_month: '2024-12', default_region: 'america-do-sul',
-  }
-  const [data, setData] = useState<DashboardSummary>(demoSummary)
-  const [options, setOptions] = useState<DashboardOptions>(fallbackOptions)
-  const [month, setMonth] = useState('2024-12')
-  const [region, setRegion] = useState('america-do-sul')
-  const [source, setSource] = useState<'api' | 'demo'>('demo')
+  const [locations, setLocations] = useState<LocationOption[]>([])
+  const [location, setLocation] = useState('recife')
+  const [data, setData] = useState<LiveOverview | null>(null)
   const [loading, setLoading] = useState(true)
-  const [requestKey, setRequestKey] = useState(0)
-
-  useEffect(() => {
-    const controller = new AbortController()
-    getDashboardOptions(controller.signal)
-      .then((availableOptions) => setOptions(availableOptions))
-      .catch((error: Error) => { if (error.name !== 'AbortError') return undefined })
-    return () => controller.abort()
-  }, [])
-
-  useEffect(() => {
-    const controller = new AbortController()
-    getDashboardSummary(month, region, controller.signal)
-      .then((result) => { setData(result); setSource('api') })
-      .catch((error: Error) => { if (error.name !== 'AbortError') setSource('demo') })
-      .finally(() => { if (!controller.signal.aborted) setLoading(false) })
-    return () => controller.abort()
-  }, [month, region, requestKey])
-
-  const changeMonth = (value: string) => {
-    setLoading(true)
-    setMonth(value)
-  }
-  const changeRegion = (value: string) => {
-    setLoading(true)
-    setRegion(value)
-  }
-
-  const refresh = () => {
-    setLoading(true)
-    setRequestKey((value) => value + 1)
-  }
-
-  return (
-    <main className="shell">
-      <header className="topbar">
-        <a className="brand" href="#inicio" aria-label="Climazoide, início"><span className="brand__mark"><CloudRain size={22} /></span><span>CLIMA<strong>ZOIDE</strong></span></a>
-        <div className="topbar__meta"><button className="refresh-button" onClick={refresh} disabled={loading}><RefreshCw size={13} /> Atualizar</button><span className={`connection connection--${source}`}>{loading ? 'Sincronizando…' : source === 'api' ? 'API conectada' : 'Modo demonstração'}</span><span>WORCAP 2026 · INPE</span></div>
-      </header>
-
-      <section className="dashboard" id="inicio">
-        <aside className="sidebar">
-          <div><p className="eyebrow"><Info size={14} /> Informações</p><h1>Chuva de amanhã começa nos dados de hoje.</h1><p className="muted">Previsão climática mensal experimental para apoiar leitura rápida e decisões responsáveis.</p></div>
-          <nav aria-label="Seções do painel"><a className="nav-item nav-item--active" href="#visao"><Gauge size={18} /> Visão geral</a><a className="nav-item" href="#metricas"><Activity size={18} /> Desempenho</a><a className="nav-item" href="#fontes"><Database size={18} /> Fontes</a></nav>
-          <div className="info-block" id="fontes"><p className="info-block__label">Base de referência</p><p>{data.dataset_period}</p></div>
-          <div className="physical-list"><p className="info-block__label">Leituras físicas</p>{data.physical_variables.map((item) => <div className="physical" key={item.label}><span>{item.label}</span><small>{item.value}</small></div>)}</div>
-          <p className="sidebar__foot">Protótipo científico · valores identificados por origem</p>
-        </aside>
-
-        <div className="content" id="visao">
-          <div className="content__heading"><div><p className="eyebrow"><Sparkles size={14} /> Mês-alvo · horizonte M+1</p><h2>{data.target_month}</h2><div className="update">Origem {data.context.origin_month} · atualização {new Date(data.updated_at).toLocaleDateString('pt-BR')}</div></div><ForecastControls options={options} month={month} region={region} disabled={loading || source === 'demo'} onMonthChange={changeMonth} onRegionChange={changeRegion} /></div>
-
-          <section className="contract-strip" aria-label="Contrato da competição">
-            <div><span>Grade oficial</span><strong>{data.context.grid_resolution}</strong></div>
-            <div><span>Pontos por mês</span><strong>{data.context.grid_points.toLocaleString('pt-BR')}</strong></div>
-            <div><span>Avaliação</span><strong>{data.context.evaluation_metric}</strong></div>
-            <div><span>Submissão completa</span><strong>{data.context.submission_rows.toLocaleString('pt-BR')} linhas</strong></div>
-          </section>
-
-          <div className="hero-grid">
-            <article className="card forecast-card"><div className="card__top"><span>Precipitação média</span><StatusTag status={data.precipitation.status} /></div><div className="forecast-value">{formatValue(data.precipitation.value, data.precipitation.unit)}</div><p>Estimativa espacial média para o domínio analisado.</p><div className="rain-bars" aria-hidden="true">{[36, 58, 45, 78, 62, 92, 74, 48, 67, 53, 84, 70].map((height, index) => <i key={index} style={{ height: `${height}%` }} />)}</div></article>
-            <article className="card oni-card" tabIndex={0} aria-label="Índice ONI atual"><div className="card__top"><span>Oscilação do Pacífico</span><StatusTag status={data.oni.status} /></div><div className="oni-ring" style={{ '--progress': `${Math.min(Math.abs(data.oni.value ?? 0) * 90, 100)}%` } as React.CSSProperties}><div><strong>{formatValue(data.oni.value, data.oni.unit)}</strong><small>ONI atual</small></div></div><p>Abra o painel detalhado quando a fonte NOAA estiver conectada.</p></article>
-            <article className="card model-card"><div className="model-icon"><Layers3 size={24} /></div><div><span className="card__label">Modelo validado</span><h3>{data.model.name}</h3><p>{data.model.scope}</p><p>RMSE de validação temporal: <strong>{data.model.rmse?.toLocaleString('pt-BR', { maximumFractionDigits: 3 }) ?? 'A confirmar'}</strong></p></div></article>
-          </div>
-
-          <div className="lower-grid">
-            <article className="card chart-card"><div className="section-title"><div><span className="card__label">Comportamento recente</span><h3>Observado × previsto</h3></div><span>mm/dia</span></div><RainChart series={data.series} /></article>
-            <section className="metric-panel" id="metricas" aria-label="Métricas do modelo"><div className="section-title"><div><span className="card__label">Conjunto de teste</span><h3>Métricas que importam</h3></div></div><div className="metric-grid">{data.metrics.map((metric) => <article className="metric" key={metric.label}><span>{metric.label}</span><strong>{formatValue(metric.value, metric.unit)}</strong><StatusTag status={metric.status} /></article>)}</div><p className="metric-note">As métricas só deixam “A confirmar” quando forem calculadas sobre o conjunto de teste.</p></section>
-          </div>
-        </div>
+  const [error, setError] = useState('')
+  const [refreshKey, setRefreshKey] = useState(0)
+  useEffect(() => { const controller = new AbortController(); getLocations(controller.signal).then(setLocations).catch(() => undefined); return () => controller.abort() }, [])
+  useEffect(() => { const controller = new AbortController(); getLiveOverview(location, controller.signal).then(setData).catch((requestError: Error) => { if (requestError.name !== 'AbortError') setError(requestError.message) }).finally(() => { if (!controller.signal.aborted) setLoading(false) }); return () => controller.abort() }, [location, refreshKey])
+  const refresh = () => { setLoading(true); setError(''); setRefreshKey((key) => key + 1) }
+  const changeLocation = (nextLocation: string) => { setLoading(true); setError(''); setLocation(nextLocation) }
+  const current = data?.current
+  const air = data?.air_quality
+  return <main>
+    <header className="topbar"><a href="#agora" className="brand"><span><CloudRain size={22} /></span>CLIMA<strong>ZOIDE</strong></a><div className="top-actions"><span className={`live-pill ${error ? 'live-pill--error' : ''}`}><i />{loading ? 'Atualizando fontes' : error ? 'Fonte indisponível' : 'Dados públicos ao vivo'}</span><button onClick={refresh} disabled={loading}><RefreshCw size={15} /> Atualizar</button></div></header>
+    <section className="hero" id="agora"><div><p className="eyebrow">Inteligência climática para decisões reais</p><h1>O clima muda.<br /><em>Sua decisão acompanha.</em></h1><p className="lede">Tempo, chuva, ar, solo e impactos reunidos em uma leitura objetiva, alimentada por fontes nacionais e internacionais.</p></div><div className="location-control"><label htmlFor="location">Local monitorado</label><select id="location" value={location} onChange={(event) => changeLocation(event.target.value)}>{(locations.length ? locations : [{ id: 'recife', name: 'Recife', state: 'PE', latitude: 0, longitude: 0 }]).map((item) => <option key={item.id} value={item.id}>{item.name} · {item.state}</option>)}</select><small>{data ? `${data.location.latitude.toFixed(4)}, ${data.location.longitude.toFixed(4)} · ${data.timezone}` : 'Conectando ao backend…'}</small></div></section>
+    {error && !data && <section className="error-state"><CloudRain size={34} /><h2>Não foi possível consultar as fontes agora.</h2><p>{error} Nenhum dado simulado foi exibido.</p><button onClick={refresh}>Tentar novamente</button></section>}
+    {data && <>
+      <section className="now-grid" aria-busy={loading}>
+        <article className="weather-card primary-card"><div className="card-head"><span>Agora em {data.location.name}</span><span className="verified"><ShieldCheck size={14} /> real</span></div><div className="temperature">{format(current?.temperature, '°')}</div><h2>{weatherLabel(current?.weather_code ?? -1)}</h2><p>Sensação de {format(current?.apparent_temperature, '°C')} · atualização {new Date(current?.observed_at ?? data.generated_at).toLocaleString('pt-BR')}</p><div className="mini-stats"><span><Droplets /> {format(current?.humidity, '%', 0)}</span><span><Wind /> {format(current?.wind_speed, ' km/h')}</span><span><CloudRain /> {format(current?.precipitation, ' mm')}</span></div></article>
+        <article className="weather-card"><div className="card-head"><span>Ar e saúde</span><Activity size={18} /></div><strong className="aqi">{format(air?.us_aqi, '', 0)}</strong><span className="aqi-label">AQI · {aqiLabel(air?.us_aqi ?? null)}</span><div className="air-grid"><span>PM2.5<strong>{format(air?.pm2_5, ' µg/m³')}</strong></span><span>Ozônio<strong>{format(air?.ozone, ' µg/m³')}</strong></span><span>UV agora<strong>{format(air?.uv_index)}</strong></span></div><p>Composição atmosférica CAMS. Informação ambiental, não orientação médica.</p></article>
+        <article className="weather-card"><div className="card-head"><span>Sistema físico</span><Gauge size={18} /></div><div className="system-row"><Droplets /><div><span>Umidade superficial do solo</span><strong>{format(current?.soil_moisture, ' m³/m³', 3)}</strong></div></div><div className="system-row"><Wind /><div><span>Rajadas</span><strong>{format(current?.wind_gusts, ' km/h')}</strong></div></div><div className="system-row"><Gauge /><div><span>Pressão superficial</span><strong>{format(current?.surface_pressure, ' hPa', 0)}</strong></div></div></article>
       </section>
-    </main>
-  )
+      <section className="section-block"><div className="section-heading"><div><p className="eyebrow">Próximos 7 dias</p><h2>Chuva e temperatura</h2></div><p>Previsão mais recente disponível, atualizada diretamente pelos modelos.</p></div><div className="forecast-grid">{data.daily.map((day) => <article key={day.time} className="day-card"><span>{new Date(`${day.time}T12:00:00`).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit' })}</span><CloudRain className={day.precipitation_sum > 1 ? 'rainy' : ''} /><strong>{format(day.temperature_2m_max, '°', 0)} <small>{format(day.temperature_2m_min, '°', 0)}</small></strong><div className="rain-prob"><i style={{ width: `${day.precipitation_probability_max ?? 0}%` }} /></div><small>{format(day.precipitation_sum, ' mm')} · {format(day.precipitation_probability_max, '%', 0)}</small></article>)}</div></section>
+      <section className="section-block"><div className="section-heading"><div><p className="eyebrow">Clima conectado à vida</p><h2>Impactos que ajudam a decidir</h2></div><p>Indicadores derivados somente dos dados públicos recebidos.</p></div><div className="impact-grid">{data.impacts.map((impact, index) => { const Icon = [Droplets, Leaf, ThermometerSun, HeartPulse][index] ?? Gauge; return <article key={impact.id}><Icon /><span>{impact.label}</span><strong>{format(impact.value, ` ${impact.unit}`)}</strong><p>{impact.detail}</p></article> })}</div></section>
+      <section className="section-block"><div className="section-heading"><div><p className="eyebrow">Transparência por padrão</p><h2>Fontes e disponibilidade</h2></div><p>Sem fonte, sem número. Cada integração informa seu estado real.</p></div><div className="source-grid">{data.sources.map((source) => <a href={source.url} target="_blank" rel="noreferrer" key={source.name}><span className={source.available ? 'source-ok' : 'source-off'}>{source.available ? 'Disponível' : 'Indisponível'}</span><h3>{source.name} <ExternalLink size={14} /></h3><p>{source.scope}</p><small>{source.updated_at ? `Atualização: ${source.updated_at}` : 'Sem atualização retornada'}</small></a>)}</div></section>
+      <section className="challenge"><div><p className="eyebrow">WORCAP 2026 · INPE</p><h2>Pesquisa reproduzível, produto compreensível.</h2><p>O painel operacional complementa o desafio mensal M+1. A validação interna do PCA/EOF + LSTM obteve RMSE 1,564 mm/dia e ganho de 17,29% sobre a climatologia. Não é pontuação do leaderboard.</p></div><div className="challenge-numbers"><span><strong>78.561</strong> pontos/mês</span><span><strong>0,25°</strong> grade ERA5</span><span><strong>RMSE</strong> métrica oficial</span></div></section>
+    </>}
+    <footer><span>Climazoide · código e metodologia abertos</span><span>Dados meteorológicos possuem incerteza. Consulte alertas oficiais em situações críticas.</span></footer>
+  </main>
 }

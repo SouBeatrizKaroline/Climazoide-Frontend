@@ -1,12 +1,5 @@
 import { render, screen } from '@testing-library/react'
 import { expect, it, vi } from 'vitest'
 import App from './App'
-
 vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('offline'))))
-
-it('identifica dados de demonstração e métricas não confirmadas', async () => {
-  render(<App />)
-  expect(await screen.findByText('Modo demonstração')).toBeInTheDocument()
-  expect(screen.getAllByText('A confirmar').length).toBeGreaterThan(0)
-  expect(screen.getByText('78.561')).toBeInTheDocument()
-})
+it('não substitui falha externa por números simulados', async () => { render(<App />); expect(await screen.findByText('Não foi possível consultar as fontes agora.')).toBeInTheDocument(); expect(screen.getByText(/Nenhum dado simulado foi exibido/)).toBeInTheDocument() })

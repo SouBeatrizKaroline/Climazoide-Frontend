@@ -1,54 +1,57 @@
 # Climazoide Web
 
-Interface enxuta para comunicar a previsão mensal de precipitação do desafio WORCAP 2026. O painel mostra previsão, ONI, modelo, série observado × previsto e métricas de teste sem transformar números de demonstração em resultados científicos.
+Dashboard responsivo conectado ao **Climazoide API**. Transforma dados públicos recentes em uma leitura clara de tempo, chuva, solo, ar, agricultura, conforto térmico e disponibilidade hídrica.
 
-> Estado atual: MVP de interface. Quando o backend não está disponível, a tela entra em **Modo demonstração** e identifica cada dado como `Demonstração`, `Calculado` ou `A confirmar`.
+## Funciona de verdade
 
-## O que é exigido pelo desafio
+- consulta o backend ao abrir, trocar de cidade ou atualizar;
+- exibe somente valores retornados pelas fontes públicas;
+- mostra horário, local, origem e disponibilidade;
+- não usa fallback numérico simulado;
+- apresenta erro acionável quando a fonte principal falha;
+- adapta-se a desktop, tablet e celular.
 
-- prever precipitação média do mês seguinte em mm/dia por ponto da grade;
-- preservar os IDs do `sample_submission.csv`;
-- avaliar por RMSE;
-- publicar código e documentação reproduzíveis;
-- usar os dados ERA5 fornecidos conforme as regras da competição.
+## Experiência e design
 
-## O que este frontend acrescenta
+A hierarquia prioriza decisões em três níveis:
 
-- leitura executiva da previsão e do estado do modelo;
-- visualização observado × previsto;
-- espaço preparado para ONI e variáveis físicas;
-- estados de procedência para evitar métricas decorativas;
-- navegação por teclado, HTML semântico e suporte a redução de movimento.
+1. **Agora:** temperatura, sensação, chuva, vento e condição;
+2. **Próximos sete dias:** temperatura, volume e probabilidade de chuva;
+3. **Consequências:** balanço hídrico, evapotranspiração, calor e qualidade do ar.
 
-## Rodar localmente
+Verde-água sinaliza dado rastreável. Verde-limão destaca resultados e ação. Indisponibilidades aparecem sem maquiar falhas. A interface adota texto direto, contraste alto, foco visível, HTML semântico e redução de movimento.
+
+## Rodar frontend e backend
+
+Terminal 1:
 
 ```bash
+cd Climazoide-Backend
+pip install -e ".[dev]"
+uvicorn app.main:app --reload
+```
+
+Terminal 2:
+
+```bash
+cd Climazoide-Frontend
 cp .env.example .env
-npm install
+npm ci
 npm run dev
 ```
 
-O backend esperado fica em `http://localhost:8000`. Configure outro endereço com `VITE_API_URL`.
+Acesse `http://localhost:5173`. O backend padrão é `http://localhost:8000`.
 
 ## Contrato consumido
 
-O frontend carrega primeiro `GET /v1/dashboard/options` e consulta `GET /v1/dashboard/summary?target_month=AAAA-MM&region=...` a cada mudança de filtro. O último payload válido permanece visível durante a sincronização. Consulte o OpenAPI do backend em `/docs`.
-
-O contrato exibe origem M, alvo M+1, grade 301 × 261, 78.561 pontos por mês, RMSE global e 1.885.464 linhas da submissão completa. Esses números descrevem o desafio; previsões e métricas continuam marcadas pela procedência real.
-
-## Organização
-
 ```text
-src/
-├── components/       componentes visuais pequenos
-├── test/             configuração de testes
-├── api.ts            acesso ao backend
-├── demo.ts           fallback explicitamente demonstrativo
-├── types.ts          contrato da API
-└── App.tsx           composição do dashboard
+GET /v1/live/locations
+GET /v1/live/overview?location=recife
 ```
 
-## Qualidade e commits
+O navegador não consulta serviços climáticos diretamente. O backend centraliza Open-Meteo, CAMS/Copernicus, CPTEC/INPE, timeouts, transformações e proveniência.
+
+## Qualidade
 
 ```bash
 npm run lint
@@ -57,19 +60,42 @@ npm run build
 powershell -ExecutionPolicy Bypass -File scripts/install_hooks.ps1
 ```
 
-As regras completas estão em [CONTRIBUTING.md](CONTRIBUTING.md). A CI valida a branch `main`.
+O teste garante que falhas externas não sejam trocadas por valores simulados.
 
-## Limites atuais
+## Build e publicação
 
-- o layout é desktop e propositalmente fixo, a partir de 1180 px;
-- o painel não executa o modelo no navegador;
-- métricas e ONI ficam como demonstração/indisponíveis até a integração com fontes e artefatos reais;
-- o ConvLSTM do repositório científico ainda está em desenvolvimento e não é anunciado como modelo ativo.
+```bash
+docker build --build-arg VITE_API_URL=https://api.exemplo.org -t climazoide-web .
+```
 
-## Resultado científico integrado
+Em produção, configure `VITE_API_URL` com a URL HTTPS do backend e inclua a origem do site em `ALLOWED_ORIGINS`. Nunca coloque credenciais em variáveis `VITE_*`: elas são públicas no navegador.
 
-Quando conectado ao backend, o painel mostra o RMSE `1,564 mm/dia` da validação temporal interna do PCA/EOF + LSTM e o Skill Score de aproximadamente `17,29%` contra climatologia. Esses valores vêm do artefato versionado `pca_lstm_run1`; não são uma pontuação do leaderboard Kaggle. A previsão mensal permanece marcada como demonstração até a publicação dos pesos e objetos PCA.
+## WORCAP 2026
 
-## Licença
+O painel operacional complementa a tarefa científica de estimar precipitação mensal M+1 sobre a América do Sul. Ele comunica:
 
-Antes da publicação pública, confirme com a equipe a licença apropriada e as regras específicas do conjunto de dados da competição.
+- grade ERA5 de 0,25°;
+- 78.561 pontos mensais;
+- RMSE como métrica oficial;
+- resultados internos reais do PCA/EOF + LSTM;
+- distinção explícita entre tempo recente, previsão de sete dias e previsão climática mensal.
+
+O frontend não apresenta as métricas internas como leaderboard e não afirma executar inferência mensal enquanto pesos e objetos PCA não estiverem publicados.
+
+## Estrutura
+
+```text
+src/
+├── api.ts          cliente do backend
+├── types.ts        contrato TypeScript
+├── App.tsx         estados e composição
+├── styles.css      sistema visual responsivo
+└── App.test.tsx    teste contra fallback simulado
+```
+
+## Limites responsáveis
+
+- toda previsão possui incerteza;
+- indicadores apoiam triagem e não substituem decisões médicas, agronômicas ou de defesa civil;
+- CPTEC pode ficar temporariamente indisponível e esse estado é exibido;
+- em risco imediato, consulte alertas e autoridades oficiais.
