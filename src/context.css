@@ -4,4 +4,14 @@
 .context-grid span { color: var(--muted); font-size: 10px; }
 .context-grid strong { display: block; margin-top: 7px; font-size: 20px; }
 .context-grid p { color: var(--muted); font-size: 9px; }
-@media (max-width: 900px) { .context-grid { grid-template-columns: 1fr; } }
+.coverage-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0 6px; padding: 18px; border: 1px solid var(--line); border-radius: 15px; background: rgba(9, 34, 43, .72); }
+.coverage-strip div { padding-right: 14px; border-right: 1px solid var(--line); }
+.coverage-strip div:nth-child(3) { border-right: 0; }
+.coverage-strip span { display: block; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
+.coverage-strip strong { display: block; margin-top: 6px; font-size: 13px; }
+.coverage-strip p { grid-column: 1 / -1; margin: 2px 0 0; color: var(--muted); font-size: 10px; }
+@media (max-width: 900px) {
+  .context-grid { grid-template-columns: 1fr; }
+  .coverage-strip { grid-template-columns: 1fr; }
+  .coverage-strip div { padding-bottom: 10px; border-right: 0; border-bottom: 1px solid var(--line); }
+}

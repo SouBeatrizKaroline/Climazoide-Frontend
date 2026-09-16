@@ -9,6 +9,7 @@ Dashboard responsivo conectado ao **Climazoide API**. Transforma dados públicos
 - mostra horário, local, origem e disponibilidade;
 - não usa fallback numérico simulado;
 - apresenta erro acionável quando a fonte principal falha;
+- oferece 13 pontos operacionais em países e territórios da América do Sul;
 - adapta-se a desktop, tablet e celular.
 
 ## Experiência e design
@@ -46,12 +47,14 @@ Acesse `http://localhost:5173`. O backend padrão é `http://localhost:8000`.
 
 ```text
 GET /v1/live/locations
-GET /v1/live/overview?location=recife
+GET /v1/live/overview?location=brasilia
 ```
 
 O navegador não consulta serviços climáticos diretamente. O backend centraliza Open-Meteo, CAMS/Copernicus, CPTEC/INPE, timeouts, transformações e proveniência.
 
 O painel também recebe o ONI mais recente do NOAA CPC e efemérides do US Naval Observatory para contextualizar ENSO, fase lunar, nascer e pôr do Sol sem transformar correlação em causalidade.
+
+Os pontos operacionais são Buenos Aires, La Paz, Brasília, Santiago, Bogotá, Quito, Georgetown, Assunção, Lima, Paramaribo, Montevidéu, Caracas e Caiena. CPTEC é consultado apenas no Brasil; fora dessa cobertura, a interface mostra **Fora da cobertura**, em vez de erro ou dado inventado.
 
 ## Qualidade
 
@@ -79,10 +82,17 @@ O painel operacional complementa a tarefa científica de estimar precipitação 
 - grade ERA5 de 0,25°;
 - 78.561 pontos mensais;
 - RMSE como métrica oficial;
-- resultados internos reais do PCA/EOF + LSTM;
+- estado auditado do PCA/EOF + LSTM, sem publicar métricas invalidadas;
 - distinção explícita entre tempo recente, previsão de sete dias e previsão climática mensal.
 
-O frontend não apresenta as métricas internas como leaderboard e não afirma executar inferência mensal enquanto pesos e objetos PCA não estiverem publicados.
+O frontend não apresenta as métricas antigas: a auditoria detectou que a execução histórica usava a atmosfera do mês-alvo em vez do mês anterior. O código foi corrigido, mas os resultados dependem de retreino. O painel não afirma executar inferência mensal enquanto pesos e objetos PCA não estiverem publicados.
+
+### Duas camadas, sem confusão
+
+- **Grade científica:** toda a área `60°S–15°N`, `90°O–25°O`, com 78.561 pontos por mês. É a cobertura exigida pelo Kaggle.
+- **Camada operacional:** 13 pontos representativos, usados somente para dados públicos recentes e contexto de decisão.
+
+Uma capital não representa um país inteiro e não substitui a previsão mensal em grade. Essa limitação aparece no próprio painel.
 
 ## Estrutura
 
