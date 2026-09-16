@@ -8,4 +8,5 @@ it('identifica dados de demonstração e métricas não confirmadas', async () =
   render(<App />)
   expect(await screen.findByText('Modo demonstração')).toBeInTheDocument()
   expect(screen.getAllByText('A confirmar').length).toBeGreaterThan(0)
+  expect(screen.getByText('78.561')).toBeInTheDocument()
 })

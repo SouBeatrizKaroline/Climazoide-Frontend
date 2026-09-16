@@ -32,7 +32,9 @@ O backend esperado fica em `http://localhost:8000`. Configure outro endereço co
 
 ## Contrato consumido
 
-`GET /v1/dashboard/summary` devolve o resumo completo do painel. Consulte o OpenAPI do backend em `/docs`.
+O frontend carrega primeiro `GET /v1/dashboard/options` e consulta `GET /v1/dashboard/summary?target_month=AAAA-MM&region=...` a cada mudança de filtro. O último payload válido permanece visível durante a sincronização. Consulte o OpenAPI do backend em `/docs`.
+
+O contrato exibe origem M, alvo M+1, grade 301 × 261, 78.561 pontos por mês, RMSE global e 1.885.464 linhas da submissão completa. Esses números descrevem o desafio; previsões e métricas continuam marcadas pela procedência real.
 
 ## Organização
 
@@ -55,7 +57,7 @@ npm run build
 powershell -ExecutionPolicy Bypass -File scripts/install_hooks.ps1
 ```
 
-As regras completas estão em [CONTRIBUTING.md](CONTRIBUTING.md). A CI valida somente a branch `Beatriz`.
+As regras completas estão em [CONTRIBUTING.md](CONTRIBUTING.md). A CI valida a branch `main`.
 
 ## Limites atuais
 

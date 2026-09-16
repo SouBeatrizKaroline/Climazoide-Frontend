@@ -1,13 +1,13 @@
 # Como contribuir
 
-O projeto usa apenas a branch `Beatriz` como base de integração.
+O projeto usa apenas a branch `main` como base de integração.
 
 ## Fluxo curto
 
 1. Atualize a branch antes de começar.
 2. Faça uma alteração por commit.
 3. Rode `npm run lint`, `npm test` e `npm run build`.
-4. Abra o PR contra `Beatriz` e descreva como validou a interface.
+4. Abra o PR contra `main` e descreva como validou a interface.
 
 ## Commits
 

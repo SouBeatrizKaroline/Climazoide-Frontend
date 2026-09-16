@@ -24,4 +24,14 @@ export const demoSummary: DashboardSummary = {
   ],
   dataset_period: 'ERA5 · treino 1940–2022 · avaliação 2023–2024',
   updated_at: '2026-09-16T00:00:00Z',
+  region: 'america-do-sul',
+  context: {
+    origin_month: '2024-11',
+    target_month: '2024-12',
+    horizon_months: 1,
+    grid_resolution: '0,25° · 301 × 261',
+    grid_points: 78561,
+    evaluation_metric: 'RMSE global em mm/dia',
+    submission_rows: 1885464,
+  },
 }
