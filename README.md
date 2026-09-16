@@ -66,6 +66,10 @@ As regras completas estão em [CONTRIBUTING.md](CONTRIBUTING.md). A CI valida a 
 - métricas e ONI ficam como demonstração/indisponíveis até a integração com fontes e artefatos reais;
 - o ConvLSTM do repositório científico ainda está em desenvolvimento e não é anunciado como modelo ativo.
 
+## Resultado científico integrado
+
+Quando conectado ao backend, o painel mostra o RMSE `1,564 mm/dia` da validação temporal interna do PCA/EOF + LSTM e o Skill Score de aproximadamente `17,29%` contra climatologia. Esses valores vêm do artefato versionado `pca_lstm_run1`; não são uma pontuação do leaderboard Kaggle. A previsão mensal permanece marcada como demonstração até a publicação dos pesos e objetos PCA.
+
 ## Licença
 
 Antes da publicação pública, confirme com a equipe a licença apropriada e as regras específicas do conjunto de dados da competição.
