@@ -80,6 +80,9 @@ GET /v1/live/locations
 GET /v1/live/overview?location=brasilia
 GET /v1/model/manifest
 GET /v1/research/branches
+GET /v1/submission/status
+GET /v1/submission/example.csv
+GET /v1/submission/download
 ```
 
 O navegador não consulta serviços climáticos diretamente. O backend centraliza Open-Meteo, CAMS/Copernicus, CPTEC/INPE, timeouts, transformações e proveniência.
@@ -122,6 +125,13 @@ O painel operacional complementa a tarefa científica de estimar precipitação 
 O contrato é estritamente temporal: para prever setembro, o modelo só pode usar dados
 disponíveis até agosto. Dados atmosféricos de setembro não podem ser usados como entrada
 da previsão de setembro. Isso seria vazamento temporal e invalidaria a comparação.
+
+### Download do CSV
+
+O painel oferece um exemplo de três linhas apenas para demonstrar as colunas e o formato.
+Esse exemplo é nomeado como **não válido** e não deve ser enviado. O botão do CSV completo
+permanece desabilitado até existirem o `sample_submission.csv` oficial, um retreino sem
+vazamento, pesos/transformadores publicados e validação das 1.885.464 linhas na ordem exata.
 
 O frontend não apresenta as métricas antigas: a auditoria detectou que a execução histórica usava a atmosfera do mês-alvo em vez do mês anterior. O código foi corrigido, mas os resultados dependem de retreino. O painel não afirma executar inferência mensal enquanto pesos e objetos PCA não estiverem publicados.
 

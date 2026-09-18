@@ -1,4 +1,4 @@
-import type { LiveOverview, LocationOption, ModelManifest, ResearchCatalog } from './types'
+import type { LiveOverview, LocationOption, ModelManifest, ResearchCatalog, SubmissionStatus } from './types'
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 export const MODEL_CONTRACT_VERSION = '1.2'
 async function request<T>(path: string, signal?: AbortSignal): Promise<T> { const response = await fetch(`${API_URL}${path}`, { signal }); if (!response.ok) throw new Error('Os dados públicos não responderam agora.'); return response.json() }
@@ -10,3 +10,6 @@ export const getModelManifest = async (signal?: AbortSignal) => {
   return manifest
 }
 export const getResearchCatalog = (signal?: AbortSignal) => request<ResearchCatalog>('/v1/research/branches', signal)
+export const getSubmissionStatus = (signal?: AbortSignal) => request<SubmissionStatus>('/v1/submission/status', signal)
+export const SUBMISSION_EXAMPLE_URL = `${API_URL}/v1/submission/example.csv`
+export const SUBMISSION_DOWNLOAD_URL = `${API_URL}/v1/submission/download`

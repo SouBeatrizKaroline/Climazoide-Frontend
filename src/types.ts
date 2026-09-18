@@ -81,3 +81,15 @@ export interface ResearchCatalog {
   }>
   promotion_policy: { production_metrics: false; reason: string; binary_artifacts_copied: false }
 }
+
+export interface SubmissionStatus {
+  ready: boolean
+  filename: string | null
+  columns: ['id', 'tp_mm_day']
+  expected_rows: number
+  id_contract: string
+  temporal_contract: string
+  example_available: boolean
+  example_is_submittable: false
+  blocking_reasons: string[]
+}
