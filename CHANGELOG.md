@@ -2,6 +2,12 @@
 
 Este projeto segue [Semantic Versioning](https://semver.org/).
 
+## [0.3.1] - 2026-09-18
+
+- documenta APIs, dados e responsabilidades dos três repositórios;
+- adiciona links visíveis para frontend, backend e pesquisa WORCAP;
+- esclarece o comportamento de indisponibilidade sem dados simulados.
+
 ## [0.3.0] - 2026-09-18
 
 - mapa visual das oito branches auditadas do WORCAP-2026;

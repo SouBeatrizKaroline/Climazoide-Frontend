@@ -52,5 +52,11 @@
 
 .audit-note svg { flex: none; color: var(--mint); }
 
-@media (max-width: 900px) { .branch-grid { grid-template-columns: repeat(2, 1fr); } }
+.challenge a,
+footer a { color: var(--mint); }
+
+footer nav { display: flex; gap: 14px; }
+footer nav a { text-decoration: none; }
+
+@media (max-width: 900px) { .branch-grid { grid-template-columns: repeat(2, 1fr); } footer nav { margin: 8px 0; } }
 @media (max-width: 540px) { .branch-grid { grid-template-columns: 1fr; } }

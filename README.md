@@ -8,6 +8,30 @@ Dashboard responsivo conectado ao **Climazoide API**. Transforma dados públicos
 
 Projeto aberto sob licença MIT. Consulte [como contribuir](CONTRIBUTING.md), [governança](GOVERNANCE.md), [segurança](SECURITY.md) e [histórico de versões](CHANGELOG.md).
 
+## Repositórios e responsabilidades
+
+- **Este repositório:** aplicação React/TypeScript, interface, acessibilidade e publicação no GitHub Pages.
+- **[Climazoide-Backend](https://github.com/SouBeatrizKaroline/Climazoide-Backend):** API FastAPI publicada no Render, integrações, normalização, tratamento de falhas e proveniência.
+- **[WORCAP-2026](https://github.com/mazeeqe/WORCAP-2026):** repositório científico e de testes/experimentos de modelos. Reúne PCA/PLS + LSTM, ConvLSTM, XGBoost, ONI, EDA e artefatos de pesquisa; não é alterado pelo produto Climazoide.
+
+O dashboard separa três coisas diferentes: dados meteorológicos atuais, previsão operacional
+de sete dias e pesquisa de previsão climática mensal M→M+1. Uma camada não é apresentada
+como resultado da outra.
+
+## APIs e dados apresentados
+
+| Fonte | Informação exibida |
+| --- | --- |
+| Open-Meteo | tempo atual, chuva, vento, solo e previsão de sete dias |
+| CAMS/Copernicus | AQI, material particulado, gases e UV |
+| CPTEC/INPE | comparação nacional para pontos brasileiros |
+| NOAA CPC | ONI observado e fase ENSO |
+| US Naval Observatory | fase lunar, iluminação, nascer e pôr do Sol |
+| Backend Climazoide | catálogo científico, branches auditadas e estado dos modelos |
+
+Kaggle/WORCAP e ERA5 pertencem ao pipeline científico; não alimentam silenciosamente os
+cartões de tempo atual. Métricas sem validação continuam marcadas como pesquisa ou indisponíveis.
+
 ## Funciona de verdade
 
 - consulta o backend ao abrir, trocar de cidade ou atualizar;
