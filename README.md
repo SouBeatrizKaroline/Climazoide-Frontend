@@ -22,6 +22,10 @@ O dashboard separa três coisas diferentes: dados meteorológicos atuais, previs
 de sete dias e pesquisa de previsão climática mensal M→M+1. Uma camada não é apresentada
 como resultado da outra.
 
+Na interface, a expressão **contexto operacional recente** identifica observações e previsões
+curtas usadas apenas para informação. Ela não significa entrada do modelo WORCAP. A previsão
+mensal continua limitada aos dados disponíveis até o mês anterior ao alvo.
+
 ## APIs e dados apresentados
 
 | Fonte | Informação exibida |
