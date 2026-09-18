@@ -142,9 +142,10 @@ O painel separa três opções para evitar confusão:
 - **CSV completo:** permanece desabilitado até existirem o `sample_submission.csv` oficial,
   um retreino sem vazamento, pesos/transformadores publicados e validação das 1.885.464 linhas;
 - **CSV parcial de pesquisa:** traz os 78.561 pontos de fevereiro de 2019 produzidos pelo
-  experimento `vermelho@62b3626`, usando janeiro de 2019 como origem. Inclui colunas extras
-  de proveniência e não corresponde ao teste oficial, portanto **não deve ser enviado ao Kaggle**;
-- **Exemplo de formato:** contém somente três linhas ilustrativas e também não deve ser enviado.
+  experimento `vermelho@62b3626`, usando janeiro de 2019 como origem. O arquivo público
+  contém somente `id,tp_mm_day`; a referência à branch fica restrita a esta documentação.
+  É um recorte experimental e não representa o arquivo completo;
+- **Exemplo de formato:** contém somente três linhas ilustrativas.
 
 O frontend não apresenta as métricas antigas: a auditoria detectou que a execução histórica usava a atmosfera do mês-alvo em vez do mês anterior. O código foi corrigido, mas os resultados dependem de retreino. O painel não afirma executar inferência mensal enquanto pesos e objetos PCA não estiverem publicados.
 

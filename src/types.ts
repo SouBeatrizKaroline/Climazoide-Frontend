@@ -97,9 +97,7 @@ export interface SubmissionStatus {
   partial_month: string
   partial_origin_month: string
   partial_model: string
-  partial_source_branch: string
-  partial_source_commit: string
-  partial_is_submittable: false
+  partial_is_complete: false
   partial_notice: string
   blocking_reasons: string[]
 }
