@@ -119,6 +119,10 @@ O painel operacional complementa a tarefa científica de estimar precipitação 
 - estado auditado do PCA/EOF + LSTM, sem publicar métricas invalidadas;
 - distinção explícita entre tempo recente, previsão de sete dias e previsão climática mensal.
 
+O contrato é estritamente temporal: para prever setembro, o modelo só pode usar dados
+disponíveis até agosto. Dados atmosféricos de setembro não podem ser usados como entrada
+da previsão de setembro. Isso seria vazamento temporal e invalidaria a comparação.
+
 O frontend não apresenta as métricas antigas: a auditoria detectou que a execução histórica usava a atmosfera do mês-alvo em vez do mês anterior. O código foi corrigido, mas os resultados dependem de retreino. O painel não afirma executar inferência mensal enquanto pesos e objetos PCA não estiverem publicados.
 
 O mapa de branches mostra todo o trabalho localizado no WORCAP, destaca a consolidação
