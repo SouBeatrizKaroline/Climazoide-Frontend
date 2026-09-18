@@ -8,6 +8,10 @@ Dashboard responsivo conectado ao **Climazoide API**. Transforma dados públicos
 
 Projeto aberto sob licença MIT. Consulte [como contribuir](CONTRIBUTING.md), [governança](GOVERNANCE.md), [segurança](SECURITY.md) e [histórico de versões](CHANGELOG.md).
 
+## Equipe
+
+Beatriz Karoline • Daiane Fonseca • Tomáz Giansante
+
 ## Repositórios e responsabilidades
 
 - **Este repositório:** aplicação React/TypeScript, interface, acessibilidade e publicação no GitHub Pages.
