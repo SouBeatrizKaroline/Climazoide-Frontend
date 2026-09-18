@@ -5,7 +5,7 @@ afterEach(() => vi.unstubAllGlobals())
 
 it('consome o manifesto científico do backend sem métricas antigas', async () => {
   const payload = {
-    schema_version: '1.1',
+    schema_version: '1.2',
     model_id: 'pca-lstm-run1',
     model_name: 'PCA/EOF + LSTM',
     status: 'requires_retraining',

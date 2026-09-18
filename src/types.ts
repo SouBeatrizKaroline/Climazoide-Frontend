@@ -64,3 +64,20 @@ export interface ModelManifest {
   }>
   limitations: string[]
 }
+
+export interface ResearchCatalog {
+  schema_version: string
+  audited_at: string
+  source_repository: string
+  source_repository_modified: false
+  default_branch: string
+  latest_branch: string
+  branches: Array<{
+    name: string
+    commit: string
+    updated_at: string
+    status: 'integrated_base' | 'contract_reference' | 'experimental_result' | 'merged_into_latest' | 'superseded' | 'latest'
+    work: string[]
+  }>
+  promotion_policy: { production_metrics: false; reason: string; binary_artifacts_copied: false }
+}

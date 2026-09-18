@@ -55,6 +55,7 @@ Acesse `http://localhost:5173`. O backend padrão é `http://localhost:8000`.
 GET /v1/live/locations
 GET /v1/live/overview?location=brasilia
 GET /v1/model/manifest
+GET /v1/research/branches
 ```
 
 O navegador não consulta serviços climáticos diretamente. O backend centraliza Open-Meteo, CAMS/Copernicus, CPTEC/INPE, timeouts, transformações e proveniência.
@@ -95,6 +96,10 @@ O painel operacional complementa a tarefa científica de estimar precipitação 
 - distinção explícita entre tempo recente, previsão de sete dias e previsão climática mensal.
 
 O frontend não apresenta as métricas antigas: a auditoria detectou que a execução histórica usava a atmosfera do mês-alvo em vez do mês anterior. O código foi corrigido, mas os resultados dependem de retreino. O painel não afirma executar inferência mensal enquanto pesos e objetos PCA não estiverem publicados.
+
+O mapa de branches mostra todo o trabalho localizado no WORCAP, destaca a consolidação
+mais recente e diferencia referência, experimento, incorporação e código superado. Os
+links apontam para as branches na origem, que permanece sem alterações.
 
 ### Duas camadas, sem confusão
 
