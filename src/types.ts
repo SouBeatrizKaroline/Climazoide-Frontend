@@ -91,5 +91,15 @@ export interface SubmissionStatus {
   temporal_contract: string
   example_available: boolean
   example_is_submittable: false
+  partial_available: boolean
+  partial_filename: string | null
+  partial_rows: number
+  partial_month: string
+  partial_origin_month: string
+  partial_model: string
+  partial_source_branch: string
+  partial_source_commit: string
+  partial_is_submittable: false
+  partial_notice: string
   blocking_reasons: string[]
 }
