@@ -12,6 +12,9 @@
     "url": "https://github.com/SouBeatrizKaroline/Climazoide-Frontend/issues"
   },
   "type": "module",
+  "engines": {
+    "node": "24.19.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

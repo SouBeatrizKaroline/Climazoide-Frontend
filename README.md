@@ -62,6 +62,8 @@ Verde-água sinaliza dado rastreável. Verde-limão destaca resultados e ação.
 
 ## Rodar frontend e backend
 
+O frontend usa Node.js `24.19.0` (versão registrada no `package.json` e nos workflows).
+
 Terminal 1:
 
 ```bash
