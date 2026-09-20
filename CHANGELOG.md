@@ -4,6 +4,13 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.2] - 2026-09-20
+
+- incorpora ao laboratório a nova execução PLS defasado + LSTM como pesquisa não promovida;
+- informa o RMSE interno 1,840456 com a ressalva de que a avaliação não replica o peso oficial;
+- registra a rejeição da variante ONI, que piorou para 1,865132 e mantém risco temporal;
+- preserva os downloads aprovados e a separação entre pesquisa e submissão.
+
 ## [0.6.1] - 2026-09-20
 
 - esclarece de forma discreta quais fontes entram no CSV e quais servem apenas ao produto;

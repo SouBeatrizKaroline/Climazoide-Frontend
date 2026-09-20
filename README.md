@@ -61,10 +61,15 @@ avaliação privada. A interface nunca apresenta RMSE interno como pontuação o
 | --- | --- | ---: | ---: |
 | climatologia mensal | baseline enviado | 1,882056 | 1,85077 |
 | XGBoost de anomalias | candidato validado | **1,838655** | pendente |
+| PLS defasado + LSTM | pesquisa temporal revisada | 1,840456* | pendente |
 
 O candidato foi avaliado em 3.770.928 previsões históricas de 2019–2022 e usa somente
 as entradas científicas declaradas. Modelos históricos reprovados continuam visíveis
 como pesquisa, sem serem promovidos.
+
+\* A nova métrica veio do repositório científico auditado em 20/09/2026. Ela agrega
+horizontes em proporções diferentes do teste oficial e, portanto, não é apresentada
+como score esperado. A variante com ONI piorou para 1,865132 e continua bloqueada.
 
 ## Downloads
 
