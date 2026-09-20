@@ -1,6 +1,6 @@
 import type { DecisionOptions, DecisionScenario, LiveOverview, LocationOption, ModelManifest, ResearchCatalog, SubmissionStatus } from './types'
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-export const MODEL_CONTRACT_VERSION = '1.4'
+export const MODEL_CONTRACT_VERSION = '1.5'
 async function request<T>(path: string, signal?: AbortSignal): Promise<T> { const response = await fetch(`${API_URL}${path}`, { signal }); if (!response.ok) throw new Error('Os dados públicos não responderam agora.'); return response.json() }
 export const getLocations = (signal?: AbortSignal) => request<LocationOption[]>('/v1/live/locations', signal)
 export const getLiveOverview = (location: string, signal?: AbortSignal) => request<LiveOverview>(`/v1/live/overview?location=${encodeURIComponent(location)}`, signal)
@@ -16,3 +16,4 @@ export const getDecisionScenario = (location: string, targetMonth: string, secto
 export const SUBMISSION_EXAMPLE_URL = `${API_URL}/v1/submission/example.csv`
 export const SUBMISSION_PARTIAL_URL = `${API_URL}/v1/submission/partial.csv`
 export const SUBMISSION_DOWNLOAD_URL = `${API_URL}/v1/submission/download`
+export const SUBMISSION_CANDIDATE_URL = `${API_URL}/v1/submission/candidate/download`

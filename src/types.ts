@@ -40,7 +40,7 @@ export interface LiveOverview {
 }
 
 export type ModelReadinessStatus = 'passed' | 'pending' | 'blocked_by_auth'
-export type CandidateModelStatus = 'validated_baseline' | 'ready_for_retraining' | 'ready_for_training' | 'research_only' | 'not_implemented'
+export type CandidateModelStatus = 'validated_baseline' | 'validated_candidate' | 'ready_for_retraining' | 'ready_for_training' | 'research_only' | 'not_implemented'
 
 export interface ModelManifest {
   schema_version: string
@@ -140,6 +140,20 @@ export interface SubmissionStatus {
   partial_is_complete: boolean
   partial_notice: string
   blocking_reasons: string[]
+  validated_candidate: {
+    ready: boolean
+    model_id: string
+    filename: string | null
+    validation: null | {
+      period: string
+      observations: number
+      spatial_stride: number
+      candidate_rmse: number
+      climatology_rmse: number
+    }
+    official_score: number | null
+    notice: string
+  }
 }
 
 export interface DecisionOptions {

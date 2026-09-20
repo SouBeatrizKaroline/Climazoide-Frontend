@@ -120,6 +120,7 @@ GET /v1/submission/status
 GET /v1/submission/example.csv
 GET /v1/submission/partial.csv
 GET /v1/submission/download
+GET /v1/submission/candidate/download
 ```
 
 O navegador não consulta serviços climáticos diretamente. O backend centraliza Open-Meteo, CAMS/Copernicus, CPTEC/INPE, timeouts, transformações e proveniência.
@@ -163,28 +164,31 @@ O contrato é estritamente temporal: para prever setembro, o modelo só pode usa
 disponíveis até agosto. Dados atmosféricos de setembro não podem ser usados como entrada
 da previsão de setembro. Isso seria vazamento temporal e invalidaria a comparação.
 
-O painel agora apresenta diretamente do manifesto as nove variáveis oficiais:
+O painel apresenta diretamente do manifesto as nove variáveis oficiais:
 temperatura a 2 m, cobertura de nuvens, pressão à superfície, umidade específica,
 umidade relativa, temperatura, geopotencial e componentes zonal e meridional do vento
-em 850 hPa. Cada cartão informa que a referência é o mês `T−1`. O baseline atual usa
-somente a climatologia histórica; as nove variáveis continuam reservadas aos próximos
-modelos candidatos devidamente validados.
+em 850 hPa. Cada cartão informa que a referência é o mês `T−1`. O baseline enviado usa
+somente a climatologia histórica. O novo `xgboost-anomaly-v1` usa essas nove variáveis
+em T−1 e foi validado separadamente antes de aparecer no produto.
 
 ### Download do CSV
 
 O painel separa três opções para evitar confusão:
 
 - **CSV completo:** disponibiliza 1.885.464 previsões do baseline validado para os 24
-  meses oficiais de 2023–2024, com IDs e ordem preservados;
+  meses oficiais de 2023–2024, com IDs e ordem preservados e pontuação pública 1,85077;
+- **Novo candidato:** disponibiliza, sem substituir o baseline, as mesmas 1.885.464
+  linhas produzidas pelo XGBoost de anomalias. Seu RMSE temporal interno foi 1,838655,
+  contra 1,882056 da climatologia no mesmo recorte; a pontuação oficial ainda está pendente;
 - **CSV parcial:** só aparece se um futuro modelo tiver previsões válidas para parte dos
   IDs. Como o baseline atual cobre todos os IDs, não há parcial a oferecer;
 - **Exemplo de formato:** contém somente três linhas ilustrativas.
 
-O frontend não apresenta as métricas antigas: a auditoria detectou que a execução
+O frontend não apresenta as métricas antigas como aprovadas: a auditoria detectou que a execução
 histórica usava a atmosfera do mês-alvo em vez do mês anterior. Em vez de promover
 esse resultado, o backend gerou um baseline independente usando apenas precipitação
-histórica de 1940–2022. O painel mostra seu RMSE interno de 2019–2022 e deixa explícito
-que não se trata de pontuação oficial nem do modelo mais competitivo possível.
+histórica de 1940–2022. O painel distingue pontuação pública, validação interna e o
+estado de candidato, evitando apresentar uma melhora histórica como resultado oficial.
 
 O mapa de branches mostra todo o trabalho localizado no WORCAP, destaca a consolidação
 mais recente e diferencia referência, experimento, incorporação e código superado. Os
@@ -202,7 +206,8 @@ Uma capital não representa um país inteiro e não substitui a previsão mensal
 O laboratório de modelos não contém uma lista mantida manualmente no frontend. Ele consome `/v1/model/manifest` e apresenta:
 
 - climatologia mensal espacial como baseline completo e validado;
-- PCA/EOF + LSTM, XGBoost e ONI somente como pesquisa;
+- XGBoost de anomalias como candidato validado, ainda sem pontuação oficial;
+- PCA/EOF + LSTM, XGBoost v3 e ONI somente como pesquisa;
 - ConvLSTM ainda sem artefato final reproduzível;
 - checklist de contrato temporal, grade, dataset, retreino, submissão e leaderboard;
 - commit e branch científicos que originaram o estado exibido.

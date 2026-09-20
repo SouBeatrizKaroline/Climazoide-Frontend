@@ -2,6 +2,13 @@
 
 Este projeto segue [Semantic Versioning](https://semver.org/).
 
+## [0.6.0] - 2026-09-20
+
+- apresenta o XGBoost de anomalias validado separadamente do baseline já enviado;
+- compara RMSE interno no mesmo recorte temporal e informa a pontuação pública conhecida do baseline;
+- adiciona download direto do candidato completo sem substituir silenciosamente o arquivo principal;
+- atualiza o contrato científico para `1.5` e identifica a avaliação oficial ainda pendente.
+
 ## [0.5.0] - 2026-09-20
 
 - adiciona o `Climazoide Decisão`, com seleção de mês e seis áreas de interesse;
