@@ -2,6 +2,13 @@
 
 Este projeto segue [Semantic Versioning](https://semver.org/).
 
+## [0.4.0] - 2026-09-20
+
+- adiciona leitura cruzada de chuva e temperatura com fonte, período e cautela estatística;
+- apresenta o contrato oficial, alvo protegido e as nove variáveis atmosféricas do dataset;
+- corrige o aviso superior para refletir o baseline já validado;
+- mantém o CSV oficial intacto e separa análises operacionais da previsão mensal.
+
 ## [0.3.3] - 2026-09-19
 
 - libera o download do CSV completo quando o backend confirma o artefato validado;

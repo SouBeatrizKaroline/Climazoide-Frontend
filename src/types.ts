@@ -29,6 +29,13 @@ export interface LiveOverview {
   climate_context: { oni: { available: boolean; season?: string; year?: number; value?: number; phase?: string } }
   astronomy: { available: boolean; moon_phase?: string; moon_illumination?: string; sunrise_utc?: string; sunset_utc?: string; date?: string }
   impacts: Array<{ id: string; label: string; value: number | null; unit: string; detail: string }>
+  short_range_analysis: {
+    period_start: string | null
+    period_end: string | null
+    days_received: number
+    metrics: Array<{ id: string; label: string; value: number | null; unit: string; detail: string }>
+    rain_temperature_correlation: { value: number | null; paired_days: number; interpretation: string; detail: string }
+  }
   sources: Array<{ name: string; scope: string; available: boolean; applicable?: boolean; updated_at: string | null; valid_from?: string | null; valid_until?: string | null; note?: string | null; url: string }>
 }
 
@@ -51,6 +58,21 @@ export interface ModelManifest {
   source_branch: string
   source_artifact_commit: string
   evaluation_scope: string
+  official_dataset: {
+    source: string
+    training_period: string
+    target_period: string
+    domain: string
+    resolution: string
+    grid: string
+    points_per_month: number
+    target_months: number
+    submission_rows: number
+    target: { id: string; label: string; unit: string; temporal_role: string }
+    atmospheric_features: Array<{ id: string; label: string; level: string; temporal_role: string }>
+    test_contract: string
+    baseline_usage: string
+  }
   metrics: null | {
     name: 'RMSE'
     value: number

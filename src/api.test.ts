@@ -5,7 +5,7 @@ afterEach(() => vi.unstubAllGlobals())
 
 it('consome o manifesto do baseline validado sem confundir RMSE interno com oficial', async () => {
   const payload = {
-    schema_version: '1.3',
+    schema_version: '1.4',
     model_id: 'monthly-climatology-v1',
     model_name: 'Climatologia mensal espacial',
     status: 'validated_for_submission',

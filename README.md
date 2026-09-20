@@ -49,6 +49,8 @@ métricas dos demais candidatos continuam marcadas como pesquisa ou indisponíve
 - não usa fallback numérico simulado;
 - apresenta erro acionável quando a fonte principal falha;
 - oferece 13 pontos operacionais em países e territórios da América do Sul;
+- cruza chuva e temperatura da janela de sete dias sem transformar associação em causalidade;
+- explica as nove variáveis atmosféricas oficiais, níveis e referência temporal T−1;
 - adapta-se a desktop, tablet e celular.
 
 ## Experiência e design
@@ -58,6 +60,11 @@ A hierarquia prioriza decisões em três níveis:
 1. **Agora:** temperatura, sensação, chuva, vento e condição;
 2. **Próximos sete dias:** temperatura, volume e probabilidade de chuva;
 3. **Consequências:** balanço hídrico, evapotranspiração, calor e qualidade do ar.
+
+A leitura cruzada acrescenta chuva acumulada, dias chuvosos, dias com máxima a partir
+de 32 °C, concentração da chuva e correlação de Pearson entre chuva e temperatura
+máxima. O painel sempre mostra janela, fonte e tamanho da amostra; essa correlação de
+sete dias é descritiva, não causal e não entra no CSV mensal.
 
 Verde-água sinaliza dado rastreável. Verde-limão destaca resultados e ação. Indisponibilidades aparecem sem maquiar falhas. A interface adota texto direto, contraste alto, foco visível, HTML semântico e redução de movimento.
 
@@ -137,6 +144,13 @@ O painel operacional complementa a tarefa científica de estimar precipitação 
 O contrato é estritamente temporal: para prever setembro, o modelo só pode usar dados
 disponíveis até agosto. Dados atmosféricos de setembro não podem ser usados como entrada
 da previsão de setembro. Isso seria vazamento temporal e invalidaria a comparação.
+
+O painel agora apresenta diretamente do manifesto as nove variáveis oficiais:
+temperatura a 2 m, cobertura de nuvens, pressão à superfície, umidade específica,
+umidade relativa, temperatura, geopotencial e componentes zonal e meridional do vento
+em 850 hPa. Cada cartão informa que a referência é o mês `T−1`. O baseline atual usa
+somente a climatologia histórica; as nove variáveis continuam reservadas aos próximos
+modelos candidatos devidamente validados.
 
 ### Download do CSV
 
