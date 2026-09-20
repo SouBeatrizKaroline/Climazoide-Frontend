@@ -10,25 +10,26 @@ export interface LocationOption {
 
 export interface DailyForecast {
   time: string
-  weather_code: number
-  temperature_2m_max: number
-  temperature_2m_min: number
-  precipitation_sum: number
-  precipitation_probability_max: number
-  uv_index_max: number
-  et0_fao_evapotranspiration: number
+  weather_code: number | null
+  temperature_2m_max: number | null
+  temperature_2m_min: number | null
+  precipitation_sum: number | null
+  precipitation_probability_max: number | null
+  uv_index_max: number | null
+  et0_fao_evapotranspiration: number | null
 }
 export interface LiveOverview {
   project: string; location_id: string; location: Omit<LocationOption, 'id'>; generated_at: string; timezone: string
+  weather_metadata: { provider: string; model_updated_at: string | null; valid_from: string | null; valid_until: string | null; fallback_used: boolean; primary_source_error: string | null }
   coverage: { scientific_domain: string; grid_resolution: string; grid_points_per_month: number; operational_points: number; note: string }
-  current: { observed_at: string; temperature: number; apparent_temperature: number; humidity: number; precipitation: number; weather_code: number; cloud_cover: number; surface_pressure: number; wind_speed: number; wind_direction: number; wind_gusts: number; soil_moisture: number | null; vapour_pressure_deficit: number | null }
+  current: { observed_at: string | null; temperature: number | null; apparent_temperature: number | null; humidity: number | null; precipitation: number | null; weather_code: number | null; condition?: string | null; cloud_cover: number | null; surface_pressure: number | null; wind_speed: number | null; wind_direction: number | null; wind_gusts: number | null; soil_moisture: number | null; vapour_pressure_deficit: number | null }
   air_quality: { observed_at: string | null; us_aqi: number | null; pm2_5: number | null; pm10: number | null; carbon_monoxide: number | null; nitrogen_dioxide: number | null; ozone: number | null; uv_index: number | null }
   daily: DailyForecast[]
   cptec: { available: boolean; applicable?: boolean; provider: string; location?: string; state?: string; updated_at?: string; forecast: Array<Record<string, string | number>> }
   climate_context: { oni: { available: boolean; season?: string; year?: number; value?: number; phase?: string } }
   astronomy: { available: boolean; moon_phase?: string; moon_illumination?: string; sunrise_utc?: string; sunset_utc?: string; date?: string }
   impacts: Array<{ id: string; label: string; value: number | null; unit: string; detail: string }>
-  sources: Array<{ name: string; scope: string; available: boolean; applicable?: boolean; updated_at: string | null; url: string }>
+  sources: Array<{ name: string; scope: string; available: boolean; applicable?: boolean; updated_at: string | null; valid_from?: string | null; valid_until?: string | null; note?: string | null; url: string }>
 }
 
 export type ModelReadinessStatus = 'passed' | 'pending' | 'blocked_by_auth'
@@ -86,7 +87,7 @@ export interface SubmissionStatus {
   ready: boolean
   filename: string | null
   columns: ['id', 'tp_mm_day']
-  expected_rows: number
+  expected_rows: number | null
   id_contract: string
   temporal_contract: string
   example_available: boolean
