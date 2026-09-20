@@ -2,6 +2,12 @@
 
 Este projeto segue [Semantic Versioning](https://semver.org/).
 
+## [0.3.3] - 2026-09-19
+
+- libera o download do CSV completo quando o backend confirma o artefato validado;
+- identifica claramente a climatologia mensal como baseline, não como pontuação oficial;
+- exibe período e RMSE da validação temporal interna sem promover métricas antigas.
+
 ## [0.3.2] - 2026-09-19
 
 - alinha o frontend ao contrato científico `1.3`;

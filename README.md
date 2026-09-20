@@ -38,7 +38,8 @@ mensal continua limitada aos dados disponíveis até o mês anterior ao alvo.
 | Backend Climazoide | catálogo científico, branches auditadas e estado dos modelos |
 
 Kaggle/WORCAP e ERA5 pertencem ao pipeline científico; não alimentam silenciosamente os
-cartões de tempo atual. Métricas sem validação continuam marcadas como pesquisa ou indisponíveis.
+cartões de tempo atual. O baseline de climatologia possui validação temporal própria;
+métricas dos demais candidatos continuam marcadas como pesquisa ou indisponíveis.
 
 ## Funciona de verdade
 
@@ -130,7 +131,7 @@ O painel operacional complementa a tarefa científica de estimar precipitação 
 - grade ERA5 de 0,25°;
 - 78.561 pontos mensais;
 - RMSE como métrica oficial;
-- estado auditado do PCA/EOF + LSTM, sem publicar métricas invalidadas;
+- baseline de climatologia mensal completo, sem publicar métricas invalidadas dos candidatos;
 - distinção explícita entre tempo recente, previsão de sete dias e previsão climática mensal.
 
 O contrato é estritamente temporal: para prever setembro, o modelo só pode usar dados
@@ -141,15 +142,17 @@ da previsão de setembro. Isso seria vazamento temporal e invalidaria a compara�
 
 O painel separa três opções para evitar confusão:
 
-- **CSV completo:** permanece desabilitado até existirem o `sample_submission.csv` oficial,
-  um retreino sem vazamento, pesos/transformadores publicados e validação das 1.885.464 linhas;
-- **CSV parcial de pesquisa:** traz os 78.561 pontos de fevereiro de 2019 produzidos pelo
-  experimento `vermelho@62b3626`, usando janeiro de 2019 como origem. O arquivo público
-  contém somente `id,tp_mm_day`; a referência à branch fica restrita a esta documentação.
-  É um recorte experimental e não representa o arquivo completo;
+- **CSV completo:** disponibiliza 1.885.464 previsões do baseline validado para os 24
+  meses oficiais de 2023–2024, com IDs e ordem preservados;
+- **CSV parcial:** só aparece se um futuro modelo tiver previsões válidas para parte dos
+  IDs. Como o baseline atual cobre todos os IDs, não há parcial a oferecer;
 - **Exemplo de formato:** contém somente três linhas ilustrativas.
 
-O frontend não apresenta as métricas antigas: a auditoria detectou que a execução histórica usava a atmosfera do mês-alvo em vez do mês anterior. O código foi corrigido, mas os resultados dependem de retreino. O painel não afirma executar inferência mensal enquanto pesos e objetos PCA não estiverem publicados.
+O frontend não apresenta as métricas antigas: a auditoria detectou que a execução
+histórica usava a atmosfera do mês-alvo em vez do mês anterior. Em vez de promover
+esse resultado, o backend gerou um baseline independente usando apenas precipitação
+histórica de 1940–2022. O painel mostra seu RMSE interno de 2019–2022 e deixa explícito
+que não se trata de pontuação oficial nem do modelo mais competitivo possível.
 
 O mapa de branches mostra todo o trabalho localizado no WORCAP, destaca a consolidação
 mais recente e diferencia referência, experimento, incorporação e código superado. Os
@@ -166,9 +169,9 @@ Uma capital não representa um país inteiro e não substitui a previsão mensal
 
 O laboratório de modelos não contém uma lista mantida manualmente no frontend. Ele consome `/v1/model/manifest` e apresenta:
 
-- PCA/EOF + LSTM pronto para retreino;
-- PLS concorrente e PLS defasado somente como pesquisa;
-- ConvLSTM com arquitetura pronta para treinamento, ainda sem métricas oficiais;
+- climatologia mensal espacial como baseline completo e validado;
+- PCA/EOF + LSTM, XGBoost e ONI somente como pesquisa;
+- ConvLSTM ainda sem artefato final reproduzível;
 - checklist de contrato temporal, grade, dataset, retreino, submissão e leaderboard;
 - commit e branch científicos que originaram o estado exibido.
 

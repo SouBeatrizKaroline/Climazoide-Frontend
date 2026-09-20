@@ -33,13 +33,13 @@ export interface LiveOverview {
 }
 
 export type ModelReadinessStatus = 'passed' | 'pending' | 'blocked_by_auth'
-export type CandidateModelStatus = 'ready_for_retraining' | 'ready_for_training' | 'research_only' | 'not_implemented'
+export type CandidateModelStatus = 'validated_baseline' | 'ready_for_retraining' | 'ready_for_training' | 'research_only' | 'not_implemented'
 
 export interface ModelManifest {
   schema_version: string
   model_id: string
   model_name: string
-  status: 'requires_retraining'
+  status: 'requires_retraining' | 'validated_for_submission'
   scientific_audit: {
     status: 'critical' | 'pending' | 'passed'
     rule: string
@@ -51,7 +51,14 @@ export interface ModelManifest {
   source_branch: string
   source_artifact_commit: string
   evaluation_scope: string
-  metrics: null
+  metrics: null | {
+    name: 'RMSE'
+    value: number
+    training_period: string
+    validation_period: string
+    observations: number
+    scope: string
+  }
   reviewed_sources: Array<{
     ref: string
     commit: string
@@ -97,6 +104,11 @@ export interface SubmissionStatus {
   expected_rows: number | null
   id_contract: string
   temporal_contract: string
+  model_id: string | null
+  model_name: string | null
+  submission_kind: 'validated_baseline' | null
+  validation: ModelManifest['metrics']
+  official_score: number | null
   example_available: boolean
   example_is_submittable: false
   partial_available: boolean
