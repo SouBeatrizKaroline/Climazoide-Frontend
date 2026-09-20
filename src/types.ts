@@ -22,13 +22,13 @@ export interface LiveOverview {
   project: string; location_id: string; location: Omit<LocationOption, 'id'>; generated_at: string; timezone: string
   weather_metadata: { provider: string; model_updated_at: string | null; valid_from: string | null; valid_until: string | null; fallback_used: boolean; primary_source_error: string | null }
   coverage: { scientific_domain: string; grid_resolution: string; grid_points_per_month: number; operational_points: number; note: string }
-  current: { observed_at: string | null; temperature: number | null; apparent_temperature: number | null; humidity: number | null; precipitation: number | null; weather_code: number | null; condition?: string | null; cloud_cover: number | null; surface_pressure: number | null; wind_speed: number | null; wind_direction: number | null; wind_gusts: number | null; soil_moisture: number | null; vapour_pressure_deficit: number | null }
+  current: { observed_at: string | null; temperature: number | null; apparent_temperature: number | null; humidity: number | null; precipitation: number | null; weather_code: number | null; condition?: string | null; cloud_cover: number | null; surface_pressure: number | null; sea_level_pressure?: number | null; wind_speed: number | null; wind_direction: number | null; wind_gusts: number | null; soil_moisture: number | null; vapour_pressure_deficit: number | null }
   air_quality: { observed_at: string | null; us_aqi: number | null; pm2_5: number | null; pm10: number | null; carbon_monoxide: number | null; nitrogen_dioxide: number | null; ozone: number | null; uv_index: number | null }
   daily: DailyForecast[]
   cptec: { available: boolean; applicable?: boolean; provider: string; location?: string; state?: string; updated_at?: string; forecast: Array<Record<string, string | number>> }
   climate_context: { oni: { available: boolean; season?: string; year?: number; value?: number; phase?: string } }
   astronomy: { available: boolean; moon_phase?: string; moon_illumination?: string; sunrise_utc?: string; sunset_utc?: string; date?: string }
-  impacts: Array<{ id: string; label: string; value: number | null; unit: string; detail: string }>
+  impacts: Array<{ id: string; label: string; value: number | null; unit: string; detail: string; status?: 'modelled' | 'estimated' | 'unavailable'; availability_note?: string | null }>
   short_range_analysis: {
     period_start: string | null
     period_end: string | null
@@ -140,4 +140,26 @@ export interface SubmissionStatus {
   partial_is_complete: boolean
   partial_notice: string
   blocking_reasons: string[]
+}
+
+export interface DecisionOptions {
+  sectors: Array<{ id: string; label: string; description: string }>
+  locations: Array<{ id: string; name: string; country: string }>
+  target_months: string[]
+  default_sector: string
+  default_target_month: string
+}
+
+export interface DecisionScenario {
+  location_id: string
+  location: { name: string; country: string; grid_latitude: number; grid_longitude: number }
+  target_month: string
+  sector: { id: string; label: string; description: string }
+  scenario: { predicted_mm_day: number; estimated_monthly_mm: number; historical_mean_mm_day: number; historical_p33_mm_day: number; historical_p67_mm_day: number; anomaly_percent: number | null; historical_class: string; historical_class_label: string; rainfall_regime: string; rainfall_regime_label: string }
+  headline: string
+  summary: string
+  guidance: { actions: string[]; watch: string[]; limitation: string; safety_note: string }
+  provenance: { model_id: string; training_period: string; prediction_period: string; temporal_contract: string; generated_at: string; notice: string }
+  official_submission_unchanged: true
+  is_current_forecast: false
 }

@@ -41,6 +41,13 @@ Kaggle/WORCAP e ERA5 pertencem ao pipeline científico; não alimentam silencios
 cartões de tempo atual. O baseline de climatologia possui validação temporal própria;
 métricas dos demais candidatos continuam marcadas como pesquisa ou indisponíveis.
 
+Quando a fonte principal falha, a interface identifica a contingência MET Norway.
+Campos que essa fonte não publica recebem uma explicação específica e, quando existe
+um método meteorológico defensável, uma alternativa claramente marcada como
+aproximação. A ET₀ pode ser estimada por Hargreaves-Samani; probabilidade de chuva e
+umidade do solo não são inventadas. Pressão ao nível do mar só aparece como alternativa
+e nunca é rotulada como pressão superficial.
+
 ## Funciona de verdade
 
 - consulta o backend ao abrir, trocar de cidade ou atualizar;
@@ -52,6 +59,7 @@ métricas dos demais candidatos continuam marcadas como pesquisa ou indisponíve
 - cruza chuva e temperatura da janela de sete dias sem transformar associação em causalidade;
 - explica as nove variáveis atmosféricas oficiais, níveis e referência temporal T−1;
 - adapta-se a desktop, tablet e celular.
+- permite explorar o cenário mensal por agricultura, agronegócio, áreas de risco, hidroenergia, turismo e gestão da água.
 
 ## Experiência e design
 
@@ -60,6 +68,14 @@ A hierarquia prioriza decisões em três níveis:
 1. **Agora:** temperatura, sensação, chuva, vento e condição;
 2. **Próximos sete dias:** temperatura, volume e probabilidade de chuva;
 3. **Consequências:** balanço hídrico, evapotranspiração, calor e qualidade do ar.
+4. **Decisão mensal:** contexto setorial, ações prudentes, monitoramento e limites.
+
+O módulo **Climazoide Decisão** usa somente o catálogo publicado pelo backend. O
+usuário escolhe mês e setor; a localidade acompanha o seletor principal. A tela
+mostra a estimativa mensal, a faixa histórica e três próximos passos antes dos
+detalhes metodológicos. Os cenários oficiais disponíveis cobrem 2023–2024 e são
+rotulados como históricos, não como previsão atual. Recomendações críticas sempre
+remetem a fontes e autoridades responsáveis.
 
 A leitura cruzada acrescenta chuva acumulada, dias chuvosos, dias com máxima a partir
 de 32 °C, concentração da chuva e correlação de Pearson entre chuva e temperatura
@@ -98,6 +114,8 @@ GET /v1/live/locations
 GET /v1/live/overview?location=brasilia
 GET /v1/model/manifest
 GET /v1/research/branches
+GET /v1/decision-support/options
+GET /v1/decision-support/scenario?location=brasilia&target_month=2024-12&sector=agriculture
 GET /v1/submission/status
 GET /v1/submission/example.csv
 GET /v1/submission/partial.csv

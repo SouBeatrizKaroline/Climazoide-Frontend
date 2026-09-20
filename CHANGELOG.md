@@ -2,6 +2,13 @@
 
 Este projeto segue [Semantic Versioning](https://semver.org/).
 
+## [0.5.0] - 2026-09-20
+
+- adiciona o `Climazoide Decisão`, com seleção de mês e seis áreas de interesse;
+- apresenta cenário, comparação histórica, próximos passos e pontos a monitorar;
+- sincroniza a localidade com o seletor principal e mantém a entrega oficial separada;
+- destaca que os cenários 2023–2024 não são previsão operacional atual.
+
 ## [0.4.0] - 2026-09-20
 
 - adiciona leitura cruzada de chuva e temperatura com fonte, período e cautela estatística;
