@@ -4,91 +4,119 @@
 [![Pages](https://github.com/SouBeatrizKaroline/Climazoide-Frontend/actions/workflows/deploy-pages.yml/badge.svg)](https://soubeatrizkaroline.github.io/Climazoide-Frontend/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0b7a75.svg)](LICENSE)
 
-Dashboard responsivo conectado ao **Climazoide API**. Transforma dados públicos recentes em uma leitura clara de tempo, chuva, solo, ar, agricultura, conforto térmico e disponibilidade hídrica.
+Interface pública do Climazoide: previsão mensal de precipitação, contexto meteorológico
+recente e apoio à decisão apresentados com origem, período, disponibilidade e limites.
 
-Projeto aberto sob licença MIT. Consulte [como contribuir](CONTRIBUTING.md), [governança](GOVERNANCE.md), [segurança](SECURITY.md) e [histórico de versões](CHANGELOG.md).
+- **Site:** https://soubeatrizkaroline.github.io/Climazoide-Frontend/
+- **Backend:** https://github.com/SouBeatrizKaroline/Climazoide-Backend
+- **API:** https://climazoide-api.onrender.com/docs
+- **Pesquisa auditada, somente leitura:** https://github.com/mazeeqe/WORCAP-2026
 
 ## Equipe
 
 Beatriz Karoline • Daiane Fonseca • Tomáz Giansante
 
-## Repositórios e responsabilidades
+## O que a interface resolve
 
-- **Este repositório:** aplicação React/TypeScript, interface, acessibilidade e publicação no GitHub Pages.
-- **[Climazoide-Backend](https://github.com/SouBeatrizKaroline/Climazoide-Backend):** API FastAPI publicada no Render, integrações, normalização, tratamento de falhas e proveniência.
-- **[WORCAP-2026](https://github.com/mazeeqe/WORCAP-2026):** repositório científico e de testes/experimentos de modelos. Reúne PCA/PLS + LSTM, ConvLSTM, XGBoost, ONI, EDA e artefatos de pesquisa; não é alterado pelo produto Climazoide.
+- disponibiliza o baseline enviado e o novo candidato completo;
+- explica o contrato mensal `T−1 → T` e as nove variáveis oficiais;
+- apresenta condição atual e previsão de sete dias em 13 pontos sul-americanos;
+- identifica fonte, período, contingência e campos indisponíveis;
+- transforma o cenário mensal em leituras para agricultura, logística, risco,
+  hidroenergia, turismo e gestão da água;
+- mantém métricas internas, pontuação pública e pesquisa histórica claramente separadas.
 
-O dashboard separa três coisas diferentes: dados meteorológicos atuais, previsão operacional
-de sete dias e pesquisa de previsão climática mensal M→M+1. Uma camada não é apresentada
-como resultado da outra.
+## Três camadas, três papéis
 
-Na interface, a expressão **contexto operacional recente** identifica observações e previsões
-curtas usadas apenas para informação. Ela não significa entrada do modelo WORCAP. A previsão
-mensal continua limitada aos dados disponíveis até o mês anterior ao alvo.
+| Camada | Cobertura | Dados | Relação com o CSV |
+| --- | --- | --- | --- |
+| previsão mensal | grade 301 × 261 | arquivos científicos oficiais | gera `id,tp_mm_day` |
+| contexto recente | 13 pontos | tempo, ar e sete dias | não entra no modelo |
+| apoio à decisão | locais e setores | saída mensal + histórico permitido | interpreta; não altera o CSV |
 
-## APIs e dados apresentados
+O aviso discreto no topo e o manifesto científico deixam explícito que Open-Meteo,
+MET Norway, CAMS, CPTEC, NOAA, NASA POWER e USNO tornam a experiência mais completa,
+mas não treinam, calibram ou corrigem a submissão atual.
 
-| Fonte | Informação exibida |
+## Integridade científica
+
+Para prever um mês `T`, só podem ser usadas informações disponíveis até o fim de
+`T−1`. Os campos de janeiro usados para prever fevereiro não podem ser reorganizados
+para estimar janeiro. A precipitação ERA5 observada de 2023–2024 é alvo proibido,
+mesmo sendo pública.
+
+O painel também distingue:
+
+- **violação objetiva:** alvo, informação futura, valor real fixado ou transformação
+  ajustada com o período proibido;
+- **risco de overfitting:** escolhas sucessivas orientadas pelo leaderboard público,
+  sem evidência direta de consulta ao alvo.
+
+O recorte público de 2023 não substitui a validação temporal independente; 2024 é a
+avaliação privada. A interface nunca apresenta RMSE interno como pontuação oficial.
+
+## Estado dos modelos
+
+| Modelo | Estado | RMSE interno | Pontuação pública |
+| --- | --- | ---: | ---: |
+| climatologia mensal | baseline enviado | 1,882056 | 1,85077 |
+| XGBoost de anomalias | candidato validado | **1,838655** | pendente |
+
+O candidato foi avaliado em 3.770.928 previsões históricas de 2019–2022 e usa somente
+as entradas científicas declaradas. Modelos históricos reprovados continuam visíveis
+como pesquisa, sem serem promovidos.
+
+## Downloads
+
+- **Baixar baseline enviado:** 1.885.464 linhas já pontuadas.
+- **Baixar novo candidato:** 1.885.464 linhas validadas, score oficial pendente.
+- **CSV parcial:** só aparece quando existem previsões válidas para parte dos IDs.
+- **Exemplo de formato:** três linhas ilustrativas; não é uma submissão.
+
+Todos os arquivos completos preservam `id,tp_mm_day`, IDs, meses e ordem do arquivo
+oficial. O frontend recebe o estado do backend; não monta previsões no navegador.
+
+## Experiência e linguagem visual
+
+A hierarquia acompanha a pergunta do usuário:
+
+1. **Agora:** condição, temperatura, vento, chuva e ar.
+2. **Próximos dias:** janela prevista e relações descritivas.
+3. **Mês:** grade, modelo, auditoria e downloads.
+4. **Decisão:** cenário setorial, o que observar e limites.
+
+Verde-água sinaliza dado rastreável; verde-limão destaca resultado e ação. Estados
+indisponíveis explicam a causa em vez de usar zeros. Pressão ao nível do mar, ET₀
+aproximada e contingências são rotuladas com precisão. A interface usa HTML semântico,
+contraste alto, foco visível, layout responsivo e redução de movimento.
+
+## Fontes operacionais exibidas
+
+| Fonte | Informação |
 | --- | --- |
-| Open-Meteo | tempo atual, chuva, vento, solo e previsão de sete dias |
-| CAMS/Copernicus | AQI, material particulado, gases e UV |
-| CPTEC/INPE | comparação nacional para pontos brasileiros |
+| Open-Meteo | tempo, chuva, vento, solo e sete dias |
+| MET Norway | contingência meteorológica gratuita |
+| CAMS/Copernicus | AQI, partículas, gases e UV |
+| CPTEC/INPE | comparação nacional quando aplicável |
 | NOAA CPC | ONI observado e fase ENSO |
-| US Naval Observatory | fase lunar, iluminação, nascer e pôr do Sol |
-| Backend Climazoide | catálogo científico, branches auditadas e estado dos modelos |
+| US Naval Observatory | Sol e Lua |
 
-Kaggle/WORCAP e ERA5 pertencem ao pipeline científico; não alimentam silenciosamente os
-cartões de tempo atual. O baseline de climatologia possui validação temporal própria;
-métricas dos demais candidatos continuam marcadas como pesquisa ou indisponíveis.
+Cada resposta informa origem e validade. Falhas parciais não derrubam o restante do
+painel e nenhum número simulado é usado como substituição.
 
-Quando a fonte principal falha, a interface identifica a contingência MET Norway.
-Campos que essa fonte não publica recebem uma explicação específica e, quando existe
-um método meteorológico defensável, uma alternativa claramente marcada como
-aproximação. A ET₀ pode ser estimada por Hargreaves-Samani; probabilidade de chuva e
-umidade do solo não são inventadas. Pressão ao nível do mar só aparece como alternativa
-e nunca é rotulada como pressão superficial.
+## Executar
 
-## Funciona de verdade
+O projeto usa Node.js `24.19.0`.
 
-- consulta o backend ao abrir, trocar de cidade ou atualizar;
-- exibe somente valores retornados pelas fontes públicas;
-- mostra horário, local, origem e disponibilidade;
-- não usa fallback numérico simulado;
-- apresenta erro acionável quando a fonte principal falha;
-- oferece 13 pontos operacionais em países e territórios da América do Sul;
-- cruza chuva e temperatura da janela de sete dias sem transformar associação em causalidade;
-- explica as nove variáveis atmosféricas oficiais, níveis e referência temporal T−1;
-- adapta-se a desktop, tablet e celular.
-- permite explorar o cenário mensal por agricultura, agronegócio, áreas de risco, hidroenergia, turismo e gestão da água.
+```bash
+cp .env.example .env
+npm ci
+npm run dev
+```
 
-## Experiência e design
+Acesse http://localhost:5173. Por padrão, a API local é http://localhost:8000.
 
-A hierarquia prioriza decisões em três níveis:
-
-1. **Agora:** temperatura, sensação, chuva, vento e condição;
-2. **Próximos sete dias:** temperatura, volume e probabilidade de chuva;
-3. **Consequências:** balanço hídrico, evapotranspiração, calor e qualidade do ar.
-4. **Decisão mensal:** contexto setorial, ações prudentes, monitoramento e limites.
-
-O módulo **Climazoide Decisão** usa somente o catálogo publicado pelo backend. O
-usuário escolhe mês e setor; a localidade acompanha o seletor principal. A tela
-mostra a estimativa mensal, a faixa histórica e três próximos passos antes dos
-detalhes metodológicos. Os cenários oficiais disponíveis cobrem 2023–2024 e são
-rotulados como históricos, não como previsão atual. Recomendações críticas sempre
-remetem a fontes e autoridades responsáveis.
-
-A leitura cruzada acrescenta chuva acumulada, dias chuvosos, dias com máxima a partir
-de 32 °C, concentração da chuva e correlação de Pearson entre chuva e temperatura
-máxima. O painel sempre mostra janela, fonte e tamanho da amostra; essa correlação de
-sete dias é descritiva, não causal e não entra no CSV mensal.
-
-Verde-água sinaliza dado rastreável. Verde-limão destaca resultados e ação. Indisponibilidades aparecem sem maquiar falhas. A interface adota texto direto, contraste alto, foco visível, HTML semântico e redução de movimento.
-
-## Rodar frontend e backend
-
-O frontend usa Node.js `24.19.0` (versão registrada no `package.json` e nos workflows).
-
-Terminal 1:
+Para executar o backend em outro terminal:
 
 ```bash
 cd Climazoide-Backend
@@ -96,138 +124,57 @@ pip install -e ".[dev]"
 uvicorn app.main:app --reload
 ```
 
-Terminal 2:
-
-```bash
-cd Climazoide-Frontend
-cp .env.example .env
-npm ci
-npm run dev
-```
-
-Acesse `http://localhost:5173`. O backend padrão é `http://localhost:8000`.
-
 ## Contrato consumido
 
 ```text
 GET /v1/live/locations
-GET /v1/live/overview?location=brasilia
+GET /v1/live/overview
 GET /v1/model/manifest
 GET /v1/research/branches
 GET /v1/decision-support/options
-GET /v1/decision-support/scenario?location=brasilia&target_month=2024-12&sector=agriculture
+GET /v1/decision-support/scenario
 GET /v1/submission/status
-GET /v1/submission/example.csv
-GET /v1/submission/partial.csv
 GET /v1/submission/download
 GET /v1/submission/candidate/download
+GET /v1/submission/partial.csv
+GET /v1/submission/example.csv
 ```
 
-O navegador não consulta serviços climáticos diretamente. O backend centraliza Open-Meteo, CAMS/Copernicus, CPTEC/INPE, timeouts, transformações e proveniência.
+O frontend valida `model_contract_version=1.5`. Mudanças incompatíveis falham no build
+em vez de exibir um estado científico incorreto.
 
-O painel também recebe o ONI mais recente do NOAA CPC e efemérides do US Naval Observatory para contextualizar ENSO, fase lunar, nascer e pôr do Sol sem transformar correlação em causalidade.
-
-Os pontos operacionais são Buenos Aires, La Paz, Brasília, Santiago, Bogotá, Quito, Georgetown, Assunção, Lima, Paramaribo, Montevidéu, Caracas e Caiena. CPTEC é consultado apenas no Brasil; fora dessa cobertura, a interface mostra **Fora da cobertura**, em vez de erro ou dado inventado.
-
-## Qualidade
+## Qualidade e publicação
 
 ```bash
 npm run lint
 npm test
 npm run build
-powershell -ExecutionPolicy Bypass -File scripts/install_hooks.ps1
 ```
 
-O teste garante que falhas externas não sejam trocadas por valores simulados.
-
-## Build e publicação
-
-```bash
-docker build --build-arg VITE_API_URL=https://api.exemplo.org -t climazoide-web .
-```
-
-Em produção, configure `VITE_API_URL` com a URL HTTPS do backend e inclua a origem do site em `ALLOWED_ORIGINS`. Nunca coloque credenciais em variáveis `VITE_*`: elas são públicas no navegador.
-
-Para o GitHub Pages, crie em **Settings → Secrets and variables → Actions → Variables** a variável `VITE_API_URL` com a URL HTTPS publicada pelo backend. O workflow `Deploy Pages` injeta essa variável no build; sem ela, o site continua apontando para o backend local por segurança e não exibe números simulados.
-
-## WORCAP 2026
-
-O painel operacional complementa a tarefa científica de estimar precipitação mensal M+1 sobre a América do Sul. Ele comunica:
-
-- grade ERA5 de 0,25°;
-- 78.561 pontos mensais;
-- RMSE como métrica oficial;
-- baseline de climatologia mensal completo, sem publicar métricas invalidadas dos candidatos;
-- distinção explícita entre tempo recente, previsão de sete dias e previsão climática mensal.
-
-O contrato é estritamente temporal: para prever setembro, o modelo só pode usar dados
-disponíveis até agosto. Dados atmosféricos de setembro não podem ser usados como entrada
-da previsão de setembro. Isso seria vazamento temporal e invalidaria a comparação.
-
-O painel apresenta diretamente do manifesto as nove variáveis oficiais:
-temperatura a 2 m, cobertura de nuvens, pressão à superfície, umidade específica,
-umidade relativa, temperatura, geopotencial e componentes zonal e meridional do vento
-em 850 hPa. Cada cartão informa que a referência é o mês `T−1`. O baseline enviado usa
-somente a climatologia histórica. O novo `xgboost-anomaly-v1` usa essas nove variáveis
-em T−1 e foi validado separadamente antes de aparecer no produto.
-
-### Download do CSV
-
-O painel separa três opções para evitar confusão:
-
-- **CSV completo:** disponibiliza 1.885.464 previsões do baseline validado para os 24
-  meses oficiais de 2023–2024, com IDs e ordem preservados e pontuação pública 1,85077;
-- **Novo candidato:** disponibiliza, sem substituir o baseline, as mesmas 1.885.464
-  linhas produzidas pelo XGBoost de anomalias. Seu RMSE temporal interno foi 1,838655,
-  contra 1,882056 da climatologia no mesmo recorte; a pontuação oficial ainda está pendente;
-- **CSV parcial:** só aparece se um futuro modelo tiver previsões válidas para parte dos
-  IDs. Como o baseline atual cobre todos os IDs, não há parcial a oferecer;
-- **Exemplo de formato:** contém somente três linhas ilustrativas.
-
-O frontend não apresenta as métricas antigas como aprovadas: a auditoria detectou que a execução
-histórica usava a atmosfera do mês-alvo em vez do mês anterior. Em vez de promover
-esse resultado, o backend gerou um baseline independente usando apenas precipitação
-histórica de 1940–2022. O painel distingue pontuação pública, validação interna e o
-estado de candidato, evitando apresentar uma melhora histórica como resultado oficial.
-
-O mapa de branches mostra todo o trabalho localizado no WORCAP, destaca a consolidação
-mais recente e diferencia referência, experimento, incorporação e código superado. Os
-links apontam para as branches na origem, que permanece sem alterações.
-
-### Duas camadas, sem confusão
-
-- **Grade científica:** toda a área `60°S–15°N`, `90°O–25°O`, com 78.561 pontos por mês. É a cobertura exigida pelo Kaggle.
-- **Camada operacional:** 13 pontos representativos, usados somente para dados públicos recentes e contexto de decisão.
-
-Uma capital não representa um país inteiro e não substitui a previsão mensal em grade. Essa limitação aparece no próprio painel.
-
-### Sincronização científica
-
-O laboratório de modelos não contém uma lista mantida manualmente no frontend. Ele consome `/v1/model/manifest` e apresenta:
-
-- climatologia mensal espacial como baseline completo e validado;
-- XGBoost de anomalias como candidato validado, ainda sem pontuação oficial;
-- PCA/EOF + LSTM, XGBoost v3 e ONI somente como pesquisa;
-- ConvLSTM ainda sem artefato final reproduzível;
-- checklist de contrato temporal, grade, dataset, retreino, submissão e leaderboard;
-- commit e branch científicos que originaram o estado exibido.
-
-Se o backend mudar o contrato, a tipagem e os testes do frontend acusam a divergência durante a CI.
+- CI e deploy do GitHub Pages rodam em cada push para `main`;
+- `VITE_API_URL` define a API HTTPS de produção;
+- variáveis `VITE_*` nunca recebem segredos, pois são públicas no navegador;
+- testes impedem fallback numérico simulado e contrato incompatível;
+- a origem do site deve constar em `ALLOWED_ORIGINS` no backend.
 
 ## Estrutura
 
 ```text
 src/
-├── api.ts          cliente do backend
-├── types.ts        contrato TypeScript
-├── App.tsx         estados e composição
+├── api.ts          cliente e versão do contrato
+├── types.ts        tipos científicos e operacionais
+├── App.tsx         interface e estados
 ├── styles.css      sistema visual responsivo
-└── App.test.tsx    teste contra fallback simulado
+└── App.test.tsx    testes de comportamento
 ```
+
+Consulte [contribuição](CONTRIBUTING.md), [governança](GOVERNANCE.md),
+[segurança](SECURITY.md) e [changelog](CHANGELOG.md).
 
 ## Limites responsáveis
 
-- toda previsão possui incerteza;
-- indicadores apoiam triagem e não substituem decisões médicas, agronômicas ou de defesa civil;
-- CPTEC pode ficar temporariamente indisponível e esse estado é exibido;
-- em risco imediato, consulte alertas e autoridades oficiais.
+- previsões e reanálises possuem incerteza;
+- pontos operacionais não substituem a grade continental;
+- recomendações não substituem profissionais, alertas ou autoridades;
+- correlação de sete dias é descritiva, não causal;
+- em risco imediato, use os canais oficiais de defesa civil e meteorologia.

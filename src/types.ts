@@ -73,6 +73,14 @@ export interface ModelManifest {
     test_contract: string
     baseline_usage: string
   }
+  data_use_policy: {
+    monthly_submission_inputs: string
+    external_data_in_submission: string[]
+    operational_context_only: string[]
+    separation_rule: string
+    public_target_policy: string
+    leaderboard_policy: string
+  }
   metrics: null | {
     name: 'RMSE'
     value: number

@@ -21,6 +21,7 @@ it('consome o manifesto do baseline validado sem confundir RMSE interno com ofic
     source_artifact_commit: 'f0a17ef',
     evaluation_scope: 'validação interna; pontuação oficial pendente',
     metrics: { name: 'RMSE', value: 1.882055, training_period: '1940-01/2018-12', validation_period: '2019-01/2022-12', observations: 3770928, scope: 'não é pontuação oficial' },
+    data_use_policy: { monthly_submission_inputs: 'arquivos oficiais', external_data_in_submission: [], operational_context_only: [], separation_rule: 'camadas separadas', public_target_policy: 'alvo proibido', leaderboard_policy: 'validação independente' },
     reviewed_sources: [],
     candidate_models: [],
     readiness: [{ id: 'temporal_contract', label: 'Contrato M→M+1', status: 'passed' }],
@@ -35,6 +36,7 @@ it('consome o manifesto do baseline validado sem confundir RMSE interno com ofic
   expect(manifest.metrics?.value).toBeCloseTo(1.882055)
   expect(manifest.scientific_audit.status).toBe('passed')
   expect(manifest.scientific_audit.source_repository_read_only).toBe(true)
+  expect(manifest.data_use_policy.external_data_in_submission).toEqual([])
   expect(manifest.readiness[0].status).toBe('passed')
   expect(fetchMock).toHaveBeenCalledWith(
     expect.stringContaining('/v1/model/manifest'),

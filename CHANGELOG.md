@@ -2,6 +2,15 @@
 
 Este projeto segue [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+## [0.6.1] - 2026-09-20
+
+- esclarece de forma discreta quais fontes entram no CSV e quais servem apenas ao produto;
+- registra alvo público proibido, limite T−1 e risco de overfitting ao leaderboard;
+- reorganiza o README por camadas, integridade, modelos, downloads e operação;
+- remove repetições sem reduzir a documentação científica.
+
 ## [0.6.0] - 2026-09-20
 
 - apresenta o XGBoost de anomalias validado separadamente do baseline já enviado;
