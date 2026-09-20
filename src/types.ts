@@ -40,6 +40,13 @@ export interface ModelManifest {
   model_id: string
   model_name: string
   status: 'requires_retraining'
+  scientific_audit: {
+    status: 'critical' | 'pending' | 'passed'
+    rule: string
+    summary: string
+    source_audit_commit: string
+    source_repository_read_only: boolean
+  }
   source_repository: string
   source_branch: string
   source_artifact_commit: string
@@ -95,10 +102,8 @@ export interface SubmissionStatus {
   partial_available: boolean
   partial_filename: string | null
   partial_rows: number
-  partial_month: string
-  partial_origin_month: string
-  partial_model: string
-  partial_is_complete: false
+  partial_target_months: string[]
+  partial_is_complete: boolean
   partial_notice: string
   blocking_reasons: string[]
 }

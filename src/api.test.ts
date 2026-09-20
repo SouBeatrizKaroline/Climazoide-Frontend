@@ -9,6 +9,13 @@ it('consome o manifesto científico do backend sem métricas antigas', async () 
     model_id: 'pca-lstm-run1',
     model_name: 'PCA/EOF + LSTM',
     status: 'requires_retraining',
+    scientific_audit: {
+      status: 'critical',
+      rule: 'Para prever T, usar somente dados disponíveis até T−1.',
+      summary: 'Alinhamento temporal pendente.',
+      source_audit_commit: '54ab930',
+      source_repository_read_only: true,
+    },
     source_repository: 'https://github.com/mazeeqe/WORCAP-2026',
     source_branch: 'Beatriz',
     source_artifact_commit: 'f0a17ef',
@@ -26,6 +33,8 @@ it('consome o manifesto científico do backend sem métricas antigas', async () 
 
   expect(manifest.schema_version).toBe(MODEL_CONTRACT_VERSION)
   expect(manifest.metrics).toBeNull()
+  expect(manifest.scientific_audit.status).toBe('critical')
+  expect(manifest.scientific_audit.source_repository_read_only).toBe(true)
   expect(manifest.readiness[0].status).toBe('passed')
   expect(fetchMock).toHaveBeenCalledWith(
     expect.stringContaining('/v1/model/manifest'),

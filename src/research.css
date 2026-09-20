@@ -52,6 +52,8 @@
 
 .audit-note svg { flex: none; color: var(--mint); }
 
+.audit-callout{display:flex;gap:12px;align-items:flex-start;margin:0 0 18px;padding:16px;border:1px solid rgba(255,132,112,.42);border-radius:12px;background:rgba(255,132,112,.07);color:#ffd8ce}.audit-callout>svg{flex:none;color:#ffad8e}.audit-callout strong{font-size:12px}.audit-callout p,.audit-callout small{display:block;margin:5px 0 0;color:var(--muted);font-size:10px;line-height:1.55}
+
 .challenge a,
 footer a { color: var(--mint); }
 
