@@ -60,7 +60,7 @@ avaliação privada. A interface nunca apresenta RMSE interno como pontuação o
 | Modelo | Estado | RMSE interno | Pontuação pública |
 | --- | --- | ---: | ---: |
 | climatologia mensal | baseline enviado | 1,882056 | 1,85077 |
-| XGBoost de anomalias | candidato validado | **1,838655** | pendente |
+| XGBoost de anomalias | melhor envio auditado | **1,838655** | **1,81358** |
 | PLS defasado + LSTM | pesquisa temporal revisada | 1,840456* | pendente |
 
 O candidato foi avaliado em 3.770.928 previsões históricas de 2019–2022 e usa somente
@@ -74,12 +74,13 @@ como score esperado. A variante com ONI piorou para 1,865132 e continua bloquead
 ## Downloads
 
 - **Baixar baseline enviado:** 1.885.464 linhas já pontuadas.
-- **Baixar novo candidato:** 1.885.464 linhas validadas, score oficial pendente.
+- **Baixar melhor envio — XGBoost:** 1.885.464 linhas validadas, score público `1,81358`.
 - **CSV parcial:** só aparece quando existem previsões válidas para parte dos IDs.
 - **Exemplo de formato:** três linhas ilustrativas; não é uma submissão.
 
 Todos os arquivos completos preservam `id,tp_mm_day`, IDs, meses e ordem do arquivo
-oficial. O frontend recebe o estado do backend; não monta previsões no navegador.
+oficial. O frontend recebe o estado do backend; não monta previsões no navegador. O
+baseline `1,85077` permanece disponível como referência reproduzível.
 
 ## Experiência e linguagem visual
 

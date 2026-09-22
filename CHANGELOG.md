@@ -4,6 +4,13 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.3] - 2026-09-20
+
+- registra score público `1,81358` do XGBoost enviado ao Kaggle;
+- destaca o XGBoost como melhor envio auditado do Climazoide;
+- mantém o baseline `1,85077` disponível e identificado como referência;
+- substitui o estado “avaliação pendente” pelo resultado oficial no painel e no download.
+
 ## [0.6.2] - 2026-09-20
 
 - incorpora ao laboratório a nova execução PLS defasado + LSTM como pesquisa não promovida;
