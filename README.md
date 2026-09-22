@@ -61,15 +61,16 @@ avaliação privada. A interface nunca apresenta RMSE interno como pontuação o
 | --- | --- | ---: | ---: |
 | climatologia mensal | baseline enviado | 1,882056 | 1,85077 |
 | XGBoost de anomalias | melhor envio auditado | **1,838655** | **1,81358** |
-| PLS defasado + LSTM | pesquisa temporal revisada | 1,840456* | pendente |
+| blend PLS defasado + LSTM | CV walk-forward sem ONI | 1,780512* | pendente |
 
 O candidato foi avaliado em 3.770.928 previsões históricas de 2019–2022 e usa somente
 as entradas científicas declaradas. Modelos históricos reprovados continuam visíveis
 como pesquisa, sem serem promovidos.
 
-\* A nova métrica veio do repositório científico auditado em 20/09/2026. Ela agrega
-horizontes em proporções diferentes do teste oficial e, portanto, não é apresentada
-como score esperado. A variante com ONI piorou para 1,865132 e continua bloqueada.
+\* RMSE-CV LOFO em cinco cortes históricos, auditado em 22/09/2026. Não é score oficial
+e não foi promovido porque a origem não versiona o CSV final. O blend indicado como
+final inclui ONI trimestral centrado em `T−1`, que pode incorporar o mês `T`, e por isso
+continua bloqueado.
 
 ## Downloads
 

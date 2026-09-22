@@ -4,6 +4,13 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.4] - 2026-09-22
+
+- sincroniza o laboratório com a auditoria das oito branches até `vermelho@6101abb`;
+- apresenta a CV walk-forward e o blend sem ONI somente como pesquisa;
+- mantém o blend com ONI centrado explicitamente bloqueado pelo corte T−1;
+- preserva o XGBoost do Climazoide como melhor envio auditado e baixável.
+
 ## [0.6.3] - 2026-09-20
 
 - registra score público `1,81358` do XGBoost enviado ao Kaggle;
